@@ -1,0 +1,267 @@
+/*
+ * Elijjah compiler, copyright Tripleo <oluoluolu+elijah@gmail.com>
+ *
+ * The contents of this library are released under the LGPL licence v3,
+ * the GNU Lesser General Public License text was downloaded from
+ * http://www.gnu.org/licenses/lgpl.html from `Version 3, 29 June 2007'
+ */
+package tripleo.elijah_durable_elevated.comp;
+
+import org.jetbrains.annotations.*;
+import tripleo.elijah.comp.*;
+import tripleo.elijah.comp.i.*;
+import tripleo.elijah.g.*;
+import tripleo.elijah.lang.i.*;
+import tripleo.elijah.nextgen.outputstatement.*;
+import tripleo.elijah.nextgen.outputtree.*;
+import tripleo.elijah_durable_elevated.*;
+import tripleo.elijah_durable_elevated.comp.i.extra.*;
+import tripleo.elijah_durable_elevated.comp.internal.*;
+import tripleo.elijah_durable_elevated.nextgen.outputtree.*;
+import tripleo.elijah_durable_elevated.stages.gen_fn.*;
+import tripleo.elijah_durable_elevated.stages.gen_generic.*;
+import tripleo.elijah_durable_elevated.stages.gen_generic.pipeline_impl.*;
+import tripleo.elijah_elevated_durable.backbone.*;
+import tripleo.elijah_elevated_durable.comp_notation.*;
+import tripleo.elijah_fluffy.diagnostic.*;
+import tripleo.elijah_fluffy.util.*;
+
+import java.util.*;
+
+import static tripleo.elijah_fluffy.util.Helpers.*;
+
+/**
+ * Created 8/21/21 10:16 PM
+ */
+public class EvaPipeline extends PipelineMember implements AccessBus.AB_LgcListener {
+	private final          CompilationEnclosure      ce;
+	private final @NotNull EDL_IPipelineAccess       pa;
+	private final @NotNull DefaultGenerateResultSink grs;
+	private final @NotNull DoubleLatch<List<EvaNode>> latch2;
+	private final @NotNull List<FunctionStatement>    functionStatements = new ArrayList<>();
+	private CB_Output               _processOutput;
+	private Object/*CR_State*/      _processState;
+	@SuppressWarnings("unused")
+	private List<EvaNode> _lgc;
+	@SuppressWarnings("unused")
+	private PipelineLogic pipelineLogic;
+
+
+	@Contract(pure = true)
+	public EvaPipeline(@NotNull GPipelineAccess pa0) {
+		pa = (EDL_IPipelineAccess) pa0;
+
+		//
+
+		ce = pa.getCompilationEnclosure();
+
+		//
+
+		pa.subscribePipelineLogic(aPl -> pipelineLogic = aPl);
+		//pa.subscribe_lgc(aLgc -> _lgc = aLgc);
+
+		//
+
+		latch2 = new DoubleLatch<List<EvaNode>>(this::lgc_slot);
+
+		//
+
+		grs = new DefaultGenerateResultSink(pa);
+		pa.registerNodeList(att -> latch2.notifyData(att));
+		pa.setGenerateResultSink(grs);
+
+		pa.setEvaPipeline(this);
+
+		pa.install_notate(Provenance.EvaPipeline__lgc_slot, GN_GenerateNodesIntoSink.class, GN_GenerateNodesIntoSinkEnv.class);
+	}
+
+	@Override
+	public void lgc_slot(final @NotNull List<EvaNode> aLgc1) {
+		var nodesThatWereProcesed = new ArrayList<>(aLgc1);
+
+		final List<ProcessedNode> nodes = processLgc(nodesThatWereProcesed);
+		int                       y     =2;
+
+		for (EvaNode evaNode : nodesThatWereProcesed) {
+			logProgress(160, "EvaPipeline.recieve >> " + evaNode);
+		}
+
+		nodesThatWereProcesed.forEach(this::nodeToOutputFileDump);
+		functionStatements.forEach(this::functionStatementToOutputFileDump);
+
+		final CompilationEnclosure compilationEnclosure = pa.getCompilationEnclosure();
+
+		compilationEnclosure.getPipelineAccessPromise().then((pa) -> {
+			final var env = new GN_GenerateNodesIntoSinkEnv(
+					nodes,
+					grs,
+					//ce.getCompilation().world().modules(),
+					compilationEnclosure.getCompilationAccess().testSilence(),
+					pa.getAccessBus().gr,
+					compilationEnclosure
+			);
+
+			logProgress(117, "EvaPipeline >> GN_GenerateNodesIntoSink");
+			pa.notate(Provenance.EvaPipeline__lgc_slot, env);
+		});
+	}
+
+	private void logProgress(final int code, final String message) {
+		_processOutput.logProgress(code, message);
+	}
+
+	private void functionStatementToOutputFileDump(final FunctionStatement functionStatement) {
+		final String       filename = functionStatement.getFilename(pa);
+		final EG_Statement seq      = EG_Statement.of(functionStatement.getText(), EX_Explanation.withMessage("dump2"));
+		if (DebugFlags.writeDumps) {
+			final var            cot = ce.getCompilation().getOutputTree();
+			final EOT_OutputFile off = new EOT_OutputFileImpl(List_of(), filename, EOT_OutputType.DUMP, seq);
+			cot.add(off);
+		}
+	}
+
+	private void nodeToOutputFileDump(final EvaNode evaNode) {
+		EOT_FileNameProvider filename1;
+		String               filename = null;
+		final StringBuffer   sb       = new StringBuffer();
+
+		if (evaNode instanceof EvaClass aEvaClass) {
+			filename = "C_" + aEvaClass.getCode() + aEvaClass.getName();
+			sb.append("CLASS %d %s\n".formatted(aEvaClass.getCode(), aEvaClass.getName()));
+			for (EvaContainer.VarTableEntry varTableEntry : aEvaClass.varTable) {
+				sb.append("MEMBER %s %s".formatted(varTableEntry.nameToken, varTableEntry.varType));
+			}
+			for (Map.Entry<FunctionDef, EvaFunction> functionEntry : aEvaClass.functionMap.entrySet()) {
+				EvaFunction v = functionEntry.getValue();
+				sb.append("FUNCTION %d %s\n".formatted(v.getCode(), v.getFD().getNameNode().getText()));
+
+				pa.activeFunction(v);
+			}
+
+			filename1 = new EOT_FileNameProvider() {
+				@Override
+				public String getFilename() {
+					var filename2 = "C_" + aEvaClass.getCode() + aEvaClass.getName();
+					return filename2;
+				}
+			};
+
+			pa.activeClass(aEvaClass);
+		} else if (evaNode instanceof EvaNamespace aEvaNamespace) {
+			filename = "N_" + aEvaNamespace.getCode() + aEvaNamespace.getName();
+			sb.append("NAMESPACE %d %s\n".formatted(aEvaNamespace.getCode(), aEvaNamespace.getName()));
+			for (EvaContainer.VarTableEntry varTableEntry : aEvaNamespace.varTable) {
+				sb.append("MEMBER %s %s\n".formatted(varTableEntry.nameToken, varTableEntry.varType));
+			}
+			for (Map.Entry<FunctionDef, EvaFunction> functionEntry : aEvaNamespace.functionMap.entrySet()) {
+				EvaFunction v = functionEntry.getValue();
+				sb.append("FUNCTION %d %s\n".formatted(v.getCode(), v.getFD().getNameNode().getText()));
+			}
+
+			filename1 = new EOT_FileNameProvider() {
+				@Override
+				public String getFilename() {
+					var filename2 = "N_" + aEvaNamespace.getCode() + aEvaNamespace.getName();
+					return filename2;
+				}
+			};
+
+			pa.activeNamespace(aEvaNamespace);
+		} else if (evaNode instanceof EvaFunction evaFunction) {
+			int code = evaFunction.getCode();
+
+			if (code == 0) {
+				var cr = ce.getPipelineLogic().dp.getCodeRegistrar();
+				cr.registerFunction1(evaFunction);
+
+				code = evaFunction.getCode();
+				assert code != 0;
+			}
+
+			final String functionName = evaFunction.getFunctionName();
+			filename = "F_" + code + functionName;
+
+			final int finalCode = code;
+			filename1 = new EOT_FileNameProvider() {
+				@Override
+				public String getFilename() {
+					final String functionName = evaFunction.getFunctionName();
+					var          filename2    = "F_" + finalCode + functionName;
+					return filename2;
+				}
+			};
+
+			final OS_Element parent = evaFunction.getFD().getParent();
+			final OS_NamedElement namedElement = (OS_NamedElement) parent;
+			final String str;
+			if (namedElement != null) {
+				str = "FUNCTION %d %s %s\n".formatted(code, functionName, namedElement.name());
+				sb.append(str);
+			}
+			pa.activeFunction(evaFunction);
+		} else {
+			throw new IllegalStateException("Can't determine node");
+		}
+
+		final EG_Statement   seq = EG_Statement.of(sb.toString(), EX_Explanation.withMessage("dump"));
+		if (DebugFlags.writeDumps) {
+			final @NotNull EOT_OutputTree cot = pa.getCompilation().getOutputTree();
+			final EOT_OutputFile          off = new EOT_OutputFileImpl(List_of(), filename1, EOT_OutputType.DUMP, seq);
+			cot.add(off);
+		}
+	}
+
+	public static @NotNull List<ProcessedNode> processLgc(final @NotNull List<EvaNode> aLgc) {
+		final List<ProcessedNode> l = new ArrayList<>();
+
+		for (EvaNode evaNode : aLgc) {
+			l.add(new ProcessedNode1(evaNode));
+		}
+
+		return l;
+	}
+
+	public void addFunctionStatement(final FunctionStatement aFunctionStatement) {
+		functionStatements.add(aFunctionStatement);
+	}
+
+	public DefaultGenerateResultSink grs() {
+		return grs;
+	}
+
+	@Override
+	public void run(final Ok aSt, final CB_Output aOutput) {
+		_processState  = null;
+		_processOutput = new CB_Output() {
+			private final List<CB_OutputString> _o = new ArrayList<>();
+
+			@Override
+			public @NotNull List<CB_OutputString> get() {
+				return //_o;
+						aOutput.get();
+			}
+
+			@Override
+			public void logProgress(final int number, final String text) {
+				aOutput.logProgress(number, text);
+			}
+
+			@Override
+			public void print(final String s) {
+				aOutput.print(s);
+			}
+
+			@Override
+			public void logProgress(final Diagnostic aDiagnostic) {
+				aOutput.logProgress(aDiagnostic);
+			}
+		};
+
+		latch2.notifyLatch(Ok.instance());
+	}
+
+	@Override
+	public String finishPipeline_asString() {
+		return this.getClass().toString();
+	}
+}

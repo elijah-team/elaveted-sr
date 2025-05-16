@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+	<configuration default="false" name="TestBasicSlir.testBasic_fact1" type="JUnit" factoryName="JUnit"
+	               nameIsGenerated="true">
+		<module name="elevated-potential.core-impl"/>
+		<extension name="coverage">
+			<pattern>
+				<option name="PATTERN" value="tripleo.elijah_durable_elevated.slir.*"/>
+				<option name="ENABLED" value="true"/>
+			</pattern>
+		</extension>
+		<option name="PACKAGE_NAME" value="tripleo.elijah_durable_elevated.slir"/>
+		<option name="MAIN_CLASS_NAME" value="tripleo.elijah_durable_elevated.slir.TestBasicSlir"/>
+		<option name="METHOD_NAME" value="testBasic_fact1"/>
+		<option name="TEST_OBJECT" value="method"/>
+		<method v="2">
+			<option name="Make" enabled="true"/>
+		</method>
+	</configuration>
+</component>

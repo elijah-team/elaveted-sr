@@ -1,0 +1,123 @@
+package tripleo.elijah_durable_elevated.comp;
+
+import org.jetbrains.annotations.*;
+import tripleo.elijah.comp.i.*;
+import tripleo.elijah.g.*;
+import tripleo.elijah.nextgen.*;
+import tripleo.elijah.nextgen.comp_model.*;
+import tripleo.elijah.nextgen.outputstatement.*;
+import tripleo.elijah.nextgen.outputtree.*;
+import tripleo.elijah.stages.logging.*;
+import tripleo.elijah_durable_elevated.comp.functionality.f291.*;
+import tripleo.elijah_durable_elevated.comp.i.extra.*;
+import tripleo.elijah_durable_elevated.nextgen.outputtree.*;
+import tripleo.elijah_elevated_durable.comp.*;
+import tripleo.elijah_fluffy.util.*;
+import tripleo.paths.*;
+
+import java.util.*;
+
+import static tripleo.elijah_fluffy.util.Helpers.*;
+
+//aaimport tripleo.elijah_durable_elevated.work.*;
+
+public class WriteOutputTreePipeline extends PipelineMember implements GPipelineMember {
+	private final int WRITE_OUTPUT_TREE__ADD_NODE_OUTPUT = 106;
+
+	private static void addLogs(final @NotNull TriConsumer<List, EOT_FileNameProvider, EG_Statement> outputSink, final List<ElLog> logs) {
+		final String s1 = logs.get(0).getFileName();
+
+		for (final ElLog log : logs) {
+			final List<EG_Statement> stmts = new ArrayList<>();
+
+			if (log.getEntries().isEmpty())
+				continue; // README Prelude.elijjah "fails" here
+
+			for (final LogEntry entry : log.getEntries()) {
+				final EG_SingleStatement logEntryStatement = getLogEntryStatement(entry, s1);
+				stmts.add(logEntryStatement);
+			}
+
+			final EG_SequenceStatement seq      = new EG_SequenceStatement(new EG_Naming("wot.log.seq"), ()->log.getEntries().stream().map(entry->getLogEntryStatement(entry, s1)));
+			final String               fileName = log.getFileName().replace("/", "~~");
+			//final EOT_OutputFile off = new EOT_OutputFileImpl(List_of(), fileName, EOT_OutputType.LOGS, seq);
+			outputSink.accept(List_of(), ()->fileName, seq);
+		}
+	}
+
+	@NotNull
+	private static EG_SingleStatement getLogEntryStatement(final LogEntry entry, final String s1) {
+		final String logentry = String.format("[%s] [%tD %tT] %s %s",
+											  s1,
+											  entry.time(),
+											  entry.time(),
+											  entry.level(),
+											  entry.message());
+		//noinspection UnnecessaryLocalVariable
+		final EG_SingleStatement logEntryStatement = new EG_SingleStatement(logentry + "\n");
+		return logEntryStatement;
+	}
+
+	private final IPipelineAccess pa;
+
+	public WriteOutputTreePipeline(final @NotNull GPipelineAccess pa0) {
+		pa = (IPipelineAccess) pa0;
+	}
+
+	@Override
+	public void run(final Ok st, final CB_Output aOutput) throws Exception {
+		final EDL_ICompilation compilation = pa.getCompilation();
+		final EOT_OutputTree   ot          = compilation.getOutputTree();
+		final List<EOT_OutputFile> l  = ot.getList();
+
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		// HACK should be done earlier in process
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		addLogs((x,y,z)->{ot.add(new EOT_OutputFileImpl(x, y, EOT_OutputType.LOGS, z));}, compilation.getCompilationEnclosure().getLogs());
+
+		final CP_Paths paths = compilation.paths();
+
+		// TODO maybe move this 06/22
+		//  24/01/21 If it doesn't have any effect, leave it where it is
+		//   but find out the first location where we would like it
+		//   to remove the toodo
+		paths.signalCalculateFinishParse();
+
+
+
+		final CP_Path   outputRoot = paths.outputRoot();
+		final CM_UleLog L          = ((EDL_Compilation) compilation).con().getULog();
+
+		for (final EOT_OutputFile outputFile : l) {
+			final String oldPath = outputFile.getFilename();
+			final EG_Statement seq = outputFile.getStatementSequence();
+
+			if (outputFile.getType() == EOT_OutputType.SOURCES)
+				compilation.reports().addCodeOutput(()-> oldPath, outputFile);
+
+			final CP_Path pp = U.getPathForOutputFile(outputFile, outputRoot, oldPath);
+
+			L.asv(WRITE_OUTPUT_TREE__ADD_NODE_OUTPUT, pp);
+			paths.addNode(CP_RootType.OUTPUT, ER_Node.of(pp, seq));
+		}
+
+		paths.renderNodes();
+	}
+
+	@Override
+	public String finishPipeline_asString() {
+		return this.getClass().toString();
+	}
+}

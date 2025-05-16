@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Feb2021Test.testFunction" type="JUnit" factoryName="JUnit" singleton="false" nameIsGenerated="true">
+    <output_file path="$MODULE_WORKING_DIR$/out/Feb2021Test.txt" is_save="true" />
+    <module name="elevated-potential.core-impl" />
+    <shortenClasspath name="ARGS_FILE" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="tripleo.elijah_durable_elevated.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="PACKAGE_NAME" value="tripleo.elijah_durable_elevated" />
+    <option name="MAIN_CLASS_NAME" value="tripleo.elijah_durable_elevated.Feb2021Test" />
+    <option name="METHOD_NAME" value="testFunction" />
+    <option name="TEST_OBJECT" value="method" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

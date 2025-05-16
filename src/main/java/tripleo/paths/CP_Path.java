@@ -1,0 +1,48 @@
+package tripleo.paths;
+
+import tripleo.elijah.comp.*;
+import tripleo.elijah_fluffy.util.*;
+import tripleo.util.io.*;
+import tripleo.wrap.File;
+
+import java.io.*;
+import java.nio.file.*;
+
+public interface CP_Path {
+	//
+	CP_Path child(String aSubPath);
+
+	CP_SubFile subFile(String aSubFile);
+
+	//
+	CP_Path getParent();
+
+	_CP_RootPath getRootPath();
+
+	//
+	String getName();
+
+	//
+	Eventual<Path> getPathPromise();
+
+	//
+	File getRootFile();
+
+	tripleo.wrap.File toFile();
+
+	Path getPath();
+
+	Path toPath();
+
+	//
+	default InputStream getReadInputStream(IO aIO) throws FileNotFoundException {
+		return toFile().getFileInputStream();
+	}
+
+	DisposableCharSink newIOWriter(IO io);
+
+	//
+	String asString();
+
+	boolean samePath(Path px);
+}

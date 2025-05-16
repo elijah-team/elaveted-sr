@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+	<configuration default="false" name="Feb2021Test.testHier" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+		<module name="elevated-potential.core-impl"/>
+		<extension name="coverage">
+			<pattern>
+				<option name="PATTERN" value="tripleo.elijah_durable_elevated.*"/>
+				<option name="ENABLED" value="true"/>
+			</pattern>
+		</extension>
+		<option name="PACKAGE_NAME" value="tripleo.elijah_durable_elevated"/>
+		<option name="MAIN_CLASS_NAME" value="tripleo.elijah_durable_elevated.Feb2021Test"/>
+		<option name="METHOD_NAME" value="testHier"/>
+		<option name="TEST_OBJECT" value="method"/>
+		<method v="2">
+			<option name="Make" enabled="true"/>
+		</method>
+	</configuration>
+</component>

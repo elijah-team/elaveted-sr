@@ -1,0 +1,1 @@
+Premain-class: tripleo.advance_baeldung.objectsize.InstrumentationAgent
