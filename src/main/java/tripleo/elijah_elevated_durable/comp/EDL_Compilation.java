@@ -11,6 +11,7 @@ package tripleo.elijah_elevated_durable.comp;
 import clojure.lang.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
+import io.reactivex.rxjava3.core.*;
 import io.reactivex.rxjava3.core.Observer;
 import org.apache.commons.lang3.tuple.*;
 import org.jdeferred2.*;
@@ -43,6 +44,7 @@ import tripleo.elijah_durable_elevated.stages.deduce.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.i.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.impl.*;
 import tripleo.elijah_durable_elevated.stages.logging.*;
+import tripleo.elijah_durable_elevated.world.i.*;
 import tripleo.elijah_durable_elevated.world.i.LivingRepo;
 import tripleo.elijah_elevated_durable.backbone.*;
 import tripleo.elijah_elevated_durable.comp.input.*;
@@ -51,60 +53,55 @@ import tripleo.elijah_fluffy.util.*;
 import tripleo.graph.*;
 import tripleo.paths.*;
 
-import java.util.Optional;
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.*;
 
 public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
-	private final List<CN_CompilerInputWatcher>                                  _ciws;
-	private final Map<CompilerInput, CM_CompilerInput>                           _ci_models;
-	private final List<Triple<CN_CompilerInputWatcher.e, CompilerInput, Object>> _ciw_buffer;
-
-	private final          FluffyCompImpl                      _fluffyComp;
+	final                  Eventual<CompilerController>                                   ccP                   = new Eventual<>();
+	private final          List<CN_CompilerInputWatcher>                                  _ciws;
+	private final          Map<CompilerInput, CM_CompilerInput>                           _ci_models;
+	private final          List<Triple<CN_CompilerInputWatcher.e, CompilerInput, Object>> _ciw_buffer;
+	private final          FluffyCompImpl                                                 _fluffyComp;
 	//	@Getter
-	private final          CompilationConfig                   cfg;
+	private final          CompilationConfig                                              cfg;
 	//	@Getter
-	private final          CompilationEnclosure                compilationEnclosure;
+	private final          CompilationEnclosure                                           compilationEnclosure;
 	//	@Getter
-	private final          EDL_CIS                             _cis;
+	private final          EDL_CIS                                                        _cis;
 	//	@Getter
 //	private final CK_Monitor                          defaultMonitor;
 //	@Getter
-	private final          USE                                 use;
-	private final          CompFactory                         _con;
-	private final          LivingRepo                          _repo;
-	private final          CP_Paths                            paths;
-	private final          ErrSink                             errSink;
-	private final          int                                 _compilationNumber;
-	private final          CompilerInputMaster                 master;
-	private final          Finally                             _finally;
-	private final          CK_ObjectTree                       objectTree;
-	private final          List<CompilerInstructions>          xxx;
-	private final          CCI_Acceptor__CompilerInputListener cci_listener;
-	private final          PW_Controller                       pw_controller;
-	private final          LCM                                 lcm;
-
-	public @NotNull CK_Monitor getDefaultMonitor() {
-		return defaultMonitor;
-	}
-
-	private final @NotNull CK_Monitor                   defaultMonitor;
+	private final          USE                                                            use;
+	private final          CompFactory                                                    _con;
+	private final          LivingRepo                                                     _repo;
+	private final          CP_Paths                                                       paths;
+	private final          ErrSink                                                        errSink;
+	private final          int                                                            _compilationNumber;
+	private final          CompilerInputMaster                                            master;
+	private final          Finally                                                        _finally;
+	private final          CK_ObjectTree                                                  objectTree;
+	private final          List<CompilerInstructions>                                     xxx;
+	private final          CCI_Acceptor__CompilerInputListener                            cci_listener;
+	private final          PW_Controller                                                  pw_controller;
+	private final          LCM                                                            lcm;
+	private final @NotNull CK_Monitor                                                     defaultMonitor;
 	@SuppressWarnings("FieldCanBeLocal")
-	private final          Eventual<CP_Paths>           _p_pathsEventual      = new Eventual<>();
-	private final          Eventual<CompilerController> _p_CompilerController = new Eventual<>();
-	private                JarWork                      jarwork;
-	private                EIT_InputTree                _input_tree;
-	private                EOT_OutputTree               _output_tree;
-	private                IPipelineAccess              _pa;
+	private final          Eventual<CP_Paths>                                             _p_pathsEventual      = new Eventual<>();
+	private final          Eventual<CompilerController>                                   _p_CompilerController = new Eventual<>();
+	private final          _A_megaGrande                                                  _a_megaGrande         = new _A_megaGrande();
+	private                JarWork                                                        jarwork;
+	private                EIT_InputTree                                                  _input_tree;
+	private                EOT_OutputTree                                                 _output_tree;
+	private                IPipelineAccess                                                _pa;
 	@SuppressWarnings("BooleanVariableAlwaysNegated")
-	private                boolean                      _inside;
-	private                IO                           io;
-	private                CompilerInput                       __advisement;
-	private                ICompilationAccess3                 compilationAccess3;
-	private                CPX_Signals                         cpxSignals;
-	private                CompilationInterfaceRevised2        revised2;
-	private                EDL_LangModel                       langModel;
+	private                boolean                                                        _inside;
+	private                IO                                                             io;
+	private                CompilerInput                                                  __advisement;
+	private                ICompilationAccess3                                            compilationAccess3;
+	private                CPX_Signals                                                    cpxSignals;
+	private                CompilationInterfaceRevised2                                   revised2;
+	private                EDL_LangModel                                                  langModel;
 
 	public EDL_Compilation(final @NotNull ErrSink aErrSink, final IO aIo) {
 		errSink            = aErrSink;
@@ -132,103 +129,6 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		_ciws       = new ArrayList<>();
 		_ci_models  = new HashMap<>();
 		_ciw_buffer = new ArrayList<>();
-	}
-
-	public static EDL_ElLog.@NotNull Verbosity gitlabCIVerbosity() {
-		final boolean gitlab_ci = isGitlab_ci();
-		return gitlab_ci ? EDL_ElLog.Verbosity.SILENT : EDL_ElLog.Verbosity.VERBOSE;
-	}
-
-	public static boolean isGitlab_ci() {
-		return System.getenv("GITLAB_CI") != null;
-	}
-
-	public @NotNull ICompilationAccess _access() {
-		return new EDL_CompilationAccess(this);
-	}
-
-	@Override
-	public CK_ObjectTree getObjectTree() {
-		return objectTree;
-	}
-
-	@Override
-	public int errorCount() {
-		return errSink.errorCount();
-	}
-
-	@Override
-	public void feedCmdLine(final @NotNull List<String> args) {
-		final CompilerController    controller = new EDL_CompilerController(this.getCompilationAccess3());
-		ccP.resolve(controller);
-		final NonOpinionatedBuilder nob        = new NonOpinionatedBuilder();
-		final List<CompilerInput>   inputs     = nob.inputs(args);
-		feedInputs(inputs, controller);
-	}
-
-	public ICompilationAccess3 getCompilationAccess3() {
-		var _c = this;
-		if (compilationAccess3 == null) {
-			compilationAccess3 = new ICompilationAccess3() {
-				@Override
-				public EDL_ICompilation getComp() {
-					return _c;
-				}
-
-				@Override
-				public boolean getSilent() {
-					return getComp().cfg().silent;
-				}
-
-				@Override
-				public void addLog(final ElLog aLog) {
-					getComp().getCompilationEnclosure().addLog(aLog);
-				}
-
-				@Override
-				public List<ElLog> getLogs() {
-					return getComp().getCompilationEnclosure().getLogs();
-				}
-
-				@Override
-				public void writeLogs(final boolean aSilent) {
-					assert !aSilent;
-					getComp().getCompilationEnclosure().writeLogs();
-				}
-
-				@Override
-				public PipelineLogic getPipelineLogic() {
-					return getComp().getCompilationEnclosure().getPipelineLogic();
-				}
-			};
-		}
-		return compilationAccess3;
-	}
-
-	@Override
-	public void feedInputs(final @NotNull List<CompilerInput> aCompilerInputs,
-						   final @NotNull CompilerController aController) {
-		if (aCompilerInputs.isEmpty()) {
-			aController.printUsage();
-			return;
-		}
-
-		if (_p_CompilerController.isPending()) {
-			_p_CompilerController.resolve(aController);
-		} else {
-			System.err.println("240921-0213: double set CompilerController");
-		}
-
-		// FIXME 12/04 This seems like alot (esp here)
-		compilationEnclosure.setCompilerInput(aCompilerInputs);
-		aController.setEnclosure(compilationEnclosure);
-
-		for (final CompilerInput compilerInput : aCompilerInputs) {
-			compilerInput.setMaster(master); // FIXME this is too much i think
-		}
-
-		aController.processOptions();
-		aController.runner();
 	}
 
 	@Override
@@ -274,6 +174,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public String getProjectName() {
 		return getRootCI().getName();
+	}	@Override
+	public int errorCount() {
+		return errSink.errorCount();
 	}
 
 	@Override
@@ -281,29 +184,237 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		return cci_listener._root();
 	}
 
-	@Override
-	public void setRootCI(CompilerInstructions rootCI) {
-		//cci_listener.id.root = rootCI;
+	public static EDL_ElLog.@NotNull Verbosity gitlabCIVerbosity() {
+		final boolean gitlab_ci = isGitlab_ci();
+		return gitlab_ci ? EDL_ElLog.Verbosity.SILENT : EDL_ElLog.Verbosity.VERBOSE;
+	}
+
+	public static boolean isGitlab_ci() {
+		return System.getenv("GITLAB_CI") != null;
+	}	@Override
+	public void feedCmdLine(final @NotNull List<String> args) {
+		final CompilerController controller = new EDL_CompilerController(this.getCompilationAccess3());
+		ccP.resolve(controller);
+		final NonOpinionatedBuilder nob    = new NonOpinionatedBuilder();
+		final List<CompilerInput>   inputs = nob.inputs(args);
+		feedInputs(inputs, controller);
+	}
+
+	public @NotNull CK_Monitor getDefaultMonitor() {
+		return defaultMonitor;
+	}
+
+	public @NotNull ICompilationAccess _access() {
+		return new EDL_CompilationAccess(this);
 	}
 
 	@Override
-	public boolean isPackage(@NotNull final String pkg_name) {
-		return world().isPackage(pkg_name);
+	public CompilationInterfaceRevised2 revised2() {
+		if (this.revised2 != null) return this.revised2;
+		this.revised2 = new CompilationInterfaceRevised2() {
+			// FIXME backwards
+/*
+			private final @NotNull CompilationInterfaceRevised revised;
+
+			{
+				this.revised = revised();
+			}
+*/
+
+			@Override
+			public CK_Marker addMarker(final String aPath, final Object aValue) {
+				return null;
+			}
+
+			@Override
+			public CompOutput getOutput() {
+				return null;
+			}
+
+			@Override
+			public CompilationInterfaceRevised getRevised() {
+				return null;
+			}
+
+			@Override
+			public CK_Marker getMarker(final String aPath) {
+				return null;
+			}
+
+		};
+		return this.revised2;
+	}	public ICompilationAccess3 getCompilationAccess3() {
+		var _c = this;
+		if (compilationAccess3 == null) {
+			compilationAccess3 = new ICompilationAccess3() {
+				@Override
+				public EDL_ICompilation getComp() {
+					return _c;
+				}
+
+				@Override
+				public boolean getSilent() {
+					return getComp().cfg().silent;
+				}
+
+				@Override
+				public void addLog(final ElLog aLog) {
+					getComp().getCompilationEnclosure().addLog(aLog);
+				}
+
+				@Override
+				public List<ElLog> getLogs() {
+					return getComp().getCompilationEnclosure().getLogs();
+				}
+
+				@Override
+				public void writeLogs(final boolean aSilent) {
+					assert !aSilent;
+					getComp().getCompilationEnclosure().writeLogs();
+				}
+
+				@Override
+				public PipelineLogic getPipelineLogic() {
+					return getComp().getCompilationEnclosure().getPipelineLogic();
+				}
+			};
+		}
+		return compilationAccess3;
 	}
 
 	@Override
-	public OS_Package makePackage(final Qualident pkg_name) {
-		return world().makePackage(pkg_name);
+	public <T> void addInput(final EOT_Nameable aNameable,
+							 final EIT_InputType ty,
+							 final @NotNull Class<T> aClass,
+							 final Supplier<T> aSupplier) {
+		reports().addInput(aNameable, ty);
+		if (aClass.isAssignableFrom(OS_Module.class)) {
+
+		} else {
+			assert false;
+		}
+
+		var v = aSupplier.get();
+		//System.out.println("9898-0553 " + v);
+	}
+
+	/**
+	 * This one is interesting as it doesnt quite fit
+	 */
+	@Override
+	public CM_Module megaGrande(final OS_Module aModule) {
+		return _a_megaGrande.megaGrande(aModule);
 	}
 
 	@Override
-	public IO getIO() {
-		return io;
+	public Finally reports() {
+		return _finally;
+	}	@Override
+	public void feedInputs(final @NotNull List<CompilerInput> aCompilerInputs,
+						   final @NotNull CompilerController aController) {
+		if (aCompilerInputs.isEmpty()) {
+			aController.printUsage();
+			return;
+		}
+
+		if (_p_CompilerController.isPending()) {
+			_p_CompilerController.resolve(aController);
+		} else {
+			System.err.println("240921-0213: double set CompilerController");
+		}
+
+		// FIXME 12/04 This seems like alot (esp here)
+		compilationEnclosure.setCompilerInput(aCompilerInputs);
+		aController.setEnclosure(compilationEnclosure);
+
+		for (final CompilerInput compilerInput : aCompilerInputs) {
+			compilerInput.setMaster(master); // FIXME this is too much i think
+		}
+
+		aController.processOptions();
+		aController.runner();
 	}
 
 	@Override
-	public void setIO(final IO io) {
-		this.io = io;
+	public @NotNull CompilationConfig cfg() {
+		return cfg;
+	}
+
+	@NotNull
+	public List<CompilerInput> stringListToInputList(final @NotNull List<String> args) {
+		//noinspection UnnecessaryLocalVariable
+		final List<CompilerInput> inputs = args.stream()
+				.map(s -> {
+					final CompilerInput    input = new EDL_CompilerInput(s, Optional.of(this));
+					final CM_CompilerInput cm    = this.get(input);
+					if (cm.inpSameAs(s)) {
+						input.setSourceRoot();
+					} else {
+						assert false;
+					}
+					return input;
+				})
+				.collect(Collectors.toList());
+		return inputs;
+	}
+
+	@Override
+	public CM_CompilerInput get(final CompilerInput aCompilerInput) {
+		if (_ci_models.containsKey(aCompilerInput))
+			return _ci_models.get(aCompilerInput);
+
+		CM_CompilerInput result = new CM_CompilerInput(aCompilerInput, this);
+		_ci_models.put(aCompilerInput, result);
+		return result;
+	}
+
+	@Override
+	public void ____m() {
+		try {
+			final JarWork jarwork1 = getJarwork();
+			jarwork1.work();
+		} catch (WorkException aE) {
+			//throw new RuntimeException(aE);
+			aE.printStackTrace();
+		}
+	}
+
+	public JarWork getJarwork() throws WorkException {
+		if (jarwork == null) jarwork = new EDL_JarWork();
+		return jarwork;
+	}
+
+	@Override
+	public CPX_Signals signals() {
+		if (cpxSignals == null) {
+			//noinspection Convert2Lambda
+			cpxSignals = new CPX_Signals() {
+
+				@Override
+				public void subscribeCalculateFinishParse(CPX_CalculateFinishParse cp_OutputPath) {
+/*
+					pathsEventual $$ / * (CP_Paths Spaths) * / -> {
+					pathsEventual $$ / * (... (aka Spaths), <extra>) * / -> {
+					pathsEventual $$ {
+						_.subscribeCalculateFinishParse(cp_OutputPath);
+						it.subscribeCalculateFinishParse(cp_OutputPath);
+//						$.subscribeCalculateFinishParse($$);
+//						prob: {subscribeCalculateFinishParse} // !!
+					});
+*/
+					//noinspection CodeBlock2Expr
+					_p_pathsEventual.then((CP_Paths Spaths) -> {
+						Spaths.subscribeCalculateFinishParse(cp_OutputPath);
+					});
+				}
+			};
+		}
+		return cpxSignals;
+	}
+
+	@Override
+	public Operation<Ok> maybeCheckFinishEventuals() {
+		return getFluffy().maybeCheckFinishEventuals();
 	}
 
 	@Override
@@ -359,17 +470,83 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	}
 
 	@Override
+	public void setRootCI(CompilerInstructions rootCI) {
+		//cci_listener.id.root = rootCI;
+	}
+
+	@Override
+	public boolean isPackage(@NotNull final String pkg_name) {
+		return world().isPackage(pkg_name);
+	}
+
+	@Override
+	public OS_Package makePackage(final Qualident pkg_name) {
+		return world().makePackage(pkg_name);
+	}
+
+	@Override
+	public IO getIO() {
+		return io;
+	}
+
+	@Override
+	public LivingRepo world() {
+		return _repo;
+	}	@Override
+	public void setIO(final IO io) {
+		this.io = io;
+	}
+
+	@Override
+	public CM_Module megaGrande(final ElijahSpec aSpec, final Operation2<OS_Module> aModuleOperation) {
+		return _a_megaGrande.megaGrande(aSpec, aModuleOperation);
+	}
+
+	@Override
+	public CM_Ez megaGrande(final EzSpec aSpec) {
+		return _a_megaGrande.megaGrande(aSpec);
+	}
+
+	@Override
+	public LCM_CompilerAccess getLCMAccess() {
+		final var _c = this;
+		return new LCM_CompilerAccess() {
+			@Override
+			public EDL_ICompilation c() {
+				return _c;
+			}
+
+			@Override
+			public EDL_CompilationRunner cr() {
+				return c().getRunner();
+			}
+
+			@Override
+			public CompilationConfig cfg() {
+				return c()._cfg();
+			}
+		};
+	}
+
+	@Override
+	public EDL_CompilationRunner getRunner() {
+		return (EDL_CompilationRunner) getCompilationEnclosure().getCompilationRunner();
+	}
+
+	@Override
+	public CompilationConfig _cfg() {
+		return this.cfg;
+	}
+
+	@Override
 	public @NotNull ModuleBuilder moduleBuilder() {
 		return new ModuleBuilder(this);
 	}
 
 	@Override
-	public CP_Paths paths() {
-//		assert /*m*/paths != null;
-		return paths;
-	}
-
-	@Override
+	public void subscribeCI(final @NotNull Observer<CompilerInstructions> aCio) {
+		_cis.subscribe(aCio);
+	}	@Override
 	public void pushItem(CompilerInstructions aci) {
 		if (xxx.contains(aci)) {
 			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("** [CompilerInstructions::pushItem] duplicate instructions: " + aci.getFilename());
@@ -380,27 +557,80 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	}
 
 	@Override
-	public Finally reports() {
-		return _finally;
-	}
-
-	@Override
-	public void subscribeCI(final @NotNull Observer<CompilerInstructions> aCio) {
-		_cis.subscribe(aCio);
-	}
-
-	@Override
-	public @NotNull CompilationConfig cfg() {
-		return cfg;
-	}
-
-	@Override
 	public List<CompilerInput> getInputs() {
 		//return _inputs;
 		throw new UnintendedUseException();
 	}
 
 	@Override
+	public CompilationEnclosure getCompilationEnclosure() {
+		// TODO Auto-generated method stub
+		return compilationEnclosure;
+	}
+
+	@Override
+	public Operation2<GWorldModule> findPrelude(final String prelude_name) {
+		final Operation2<OS_Module> prelude = use.findPrelude(prelude_name);
+
+		if (prelude.mode() == Mode.SUCCESS) {
+			final OS_Module   m        = prelude.success();
+			final WorldModule prelude1 = _con.createWorldModule(m);
+
+			return Operation2.success(prelude1);
+		} else {
+			return Operation2.failure(prelude.failure()); // FIXME 10/15 chain
+		}
+	}
+
+	@Override
+	public IPipelineAccess pa() {
+		Preconditions.checkNotNull(_pa);
+
+		return _pa;
+	}
+
+	@Override
+	public CP_Paths paths() {
+//		assert /*m*/paths != null;
+		return paths;
+	}
+
+	@Override
+	public LCM lcm() {
+		return lcm;
+	}
+
+	@Override
+	public LangModel langModel() {
+		//return getFluffy().langModel();
+		if (this.langModel == null) {
+			this.langModel = new EDL_LangModel();
+			final CK_ObjectTree tree = this.getObjectTree();
+			tree.addSystemNode("models/lang", this.langModel);
+		}
+		return this.langModel;
+
+	}
+
+	@Override
+	public CK_ObjectTree getObjectTree() {
+		return objectTree;
+	}
+
+	/**
+	 * Convenience function
+	 *
+	 * @return
+	 */
+	@Override
+	public CompilerController feedInputsCon(final List<String> aStringList) {
+		final NonOpinionatedBuilder nob = new NonOpinionatedBuilder();
+		// contrast with defaultCompilerController
+		final CompilerController controller = nob.createCompilerController(this);
+		ccP.resolve(controller);
+		this.feedInputs(nob.inputs(aStringList), controller);
+		return controller;
+	}	@Override
 	public void use(@NotNull final CompilerInstructions compilerInstructions, final USE_Reasoning aReasoning) {
 		if (aReasoning.ty() == USE_Reasoning.Type.USE_Reasoning__findStdLib) {
 			pushItem(compilerInstructions);
@@ -411,21 +641,52 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	}
 
 	@Override
-	public LivingRepo world() {
-		return _repo;
+	public void onConfig(final DoneCallback<IPersistentMap> cb) {
+		ccP.then(Scc -> Scc.onConfig(cb));
+	}
+
+	public void testMapHooks(final List<IFunctionMapHook> ignoredAMapHooks) {
+		// pipelineLogic.dp.
+	}
+
+	public CP_Paths _paths() {
+		if (paths == null) {
+			throw new ProgramIsWrongIfYouAreHere("EDL_Compilation#_paths wasn't created yet");
+		}
+		return paths;
 	}
 
 	@Override
+	public <P> void register(final Eventual<P> aEventual) {
+		getFluffy().register(aEventual);
+	}	@Override
 	public ElijahCache use_elijahCache() {
 		return use.getElijahCache();
 	}
 
 	@Override
+	public void checkFinishEventuals() {
+		getFluffy().checkFinishEventuals();
+	}
+
+	@Override
+	public @NotNull String _host() {
+		return "EDL_Compilation";
+	}
+
+	public void addInput3(final CompilerInput aInput, final @NotNull ElevatedInput3Callback cb) {
+		// Apparently this is Immediate.IMMEDIATE
+		cb.run(aInput, this.getCompilationClosure());
+	}	@Override
 	public void pushWork(final PW_PushWork aInstance, final PN_Ping aPing) {
 		((PW_CompilerController) pw_controller).submitWork(aInstance);
 	}
 
-	private final _A_megaGrande _a_megaGrande = new _A_megaGrande();
+
+
+
+
+
 
 	/**
 	 * Always return a new result, not connected with the previous ones
@@ -516,107 +777,23 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		};
 	}
 
-	@Override
-	public CompilationInterfaceRevised2 revised2() {
-		if (this.revised2 != null) return this.revised2;
-		this.revised2 = new CompilationInterfaceRevised2() {
-			// FIXME backwards
-/*
-			private final @NotNull CompilationInterfaceRevised revised;
 
-			{
-				this.revised = revised();
-			}
-*/
 
-			@Override
-			public CK_Marker addMarker(final String aPath, final Object aValue) {
-				return null;
-			}
 
-			@Override
-			public CK_Marker getMarker(final String aPath) {
-				return null;
-			}
 
-			@Override
-			public CompOutput getOutput() {
-				return null;
-			}
 
-			@Override
-			public CompilationInterfaceRevised getRevised() {
-				return null;
-			}
 
-		};
-		return this.revised2;
-	}
 
-	@Override
-	public LCM_CompilerAccess getLCMAccess() {
-		final var _c = this;
-		return new LCM_CompilerAccess() {
-			@Override
-			public EDL_ICompilation c() {
-				return _c;
-			}
 
-			@Override
-			public EDL_CompilationRunner cr() {
-				return c().getRunner();
-			}
 
-			@Override
-			public CompilationConfig cfg() {
-				return c()._cfg();
-			}
-		};
-	}
 
-	@Override
-	public EDL_CompilationRunner getRunner() {
-		return (EDL_CompilationRunner) getCompilationEnclosure().getCompilationRunner();
-	}
 
-	@Override
-	public CompilationConfig _cfg() {
-		return this.cfg;
-	}
-
-	@Override
-	public CM_CompilerInput get(final CompilerInput aCompilerInput) {
-		if (_ci_models.containsKey(aCompilerInput))
-			return _ci_models.get(aCompilerInput);
-
-		CM_CompilerInput result = new CM_CompilerInput(aCompilerInput, this);
-		_ci_models.put(aCompilerInput, result);
-		return result;
-	}
-
-	@Override
-	public void ____m() {
-		try {
-			final JarWork jarwork1 = getJarwork();
-			jarwork1.work();
-		} catch (WorkException aE) {
-			//throw new RuntimeException(aE);
-			aE.printStackTrace();
-		}
-	}
 
 	//@Override
 	//public PW_CompilerController get_pw() {
 	//	return (PW_CompilerController) this.pw_controller;
 	//}
 
-	/**
-	 * This one is interesting as it doesnt quite fit
-	 */
-	@Override
-	public CM_Module megaGrande(final OS_Module aModule) {
-		return _a_megaGrande.megaGrande(aModule);
-	}
 
 	@Override
 	public @NotNull EOT_OutputTree getOutputTree() {
@@ -627,10 +804,6 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		return _output_tree;
 	}
 
-	public JarWork getJarwork() throws WorkException {
-		if (jarwork == null) jarwork = new EDL_JarWork();
-		return jarwork;
-	}
 
 	@Override
 	public @NotNull EIT_InputTree getInputTree() {
@@ -641,25 +814,24 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		return _input_tree;
 	}
 
+
 	@Override
 	public void subscribeCI(final ICompilerInstructionsObserver aCio) {
 		throw new UnintendedUseException(); // If this doesn't trigger on Core tests, remove
 	}
+
 
 	@Override
 	public void addToAllRegisters(final EventualRegister aEventualRegister) {
 		_p_CompilerController.then(ScompilerController -> ScompilerController.addToAllRegisters(aEventualRegister));
 	}
 
+
 	@Override
 	public void set_pa(final GPipelineAccess aPipelineAccess) {
 		set_pa((IPipelineAccess) aPipelineAccess);
 	}
 
-	@Override
-	public CM_Module megaGrande(final ElijahSpec aSpec, final Operation2<OS_Module> aModuleOperation) {
-		return _a_megaGrande.megaGrande(aSpec, aModuleOperation);
-	}
 
 	@Override
 	public void addCodeOutput(final EOT_FileNameProvider aFileNameProvider, final Supplier<EOT_OutputFile> aOutputFileSupplier, final boolean addFlag) {
@@ -669,6 +841,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 			getOutputTree().add(eof);
 		}
 	}
+
 
 	@Override
 	public void spi(final Object object) {
@@ -692,85 +865,6 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		}
 	}
 
-	@Override
-	public CM_Ez megaGrande(final EzSpec aSpec) {
-		return _a_megaGrande.megaGrande(aSpec);
-	}
-
-	@Override
-	public <T> void addInput(final EOT_Nameable aNameable,
-							 final EIT_InputType ty,
-							 final @NotNull Class<T> aClass,
-							 final Supplier<T> aSupplier) {
-		reports().addInput(aNameable, ty);
-		if (aClass.isAssignableFrom(OS_Module.class)) {
-
-		} else {
-			assert false;
-		}
-
-		var v = aSupplier.get();
-		//System.out.println("9898-0553 " + v);
-	}
-
-	@Override
-	public CPX_Signals signals() {
-		if (cpxSignals == null) {
-			//noinspection Convert2Lambda
-			cpxSignals = new CPX_Signals() {
-
-				@Override
-				public void subscribeCalculateFinishParse(CPX_CalculateFinishParse cp_OutputPath) {
-/*
-					pathsEventual $$ / * (CP_Paths Spaths) * / -> {
-					pathsEventual $$ / * (... (aka Spaths), <extra>) * / -> {
-					pathsEventual $$ {
-						_.subscribeCalculateFinishParse(cp_OutputPath);
-						it.subscribeCalculateFinishParse(cp_OutputPath);
-//						$.subscribeCalculateFinishParse($$);
-//						prob: {subscribeCalculateFinishParse} // !!
-					});
-*/
-					//noinspection CodeBlock2Expr
-					_p_pathsEventual.then((CP_Paths Spaths) -> {
-						Spaths.subscribeCalculateFinishParse(cp_OutputPath);
-					});
-				}
-			};
-		}
-		return cpxSignals;
-	}
-
-	@Override
-	public IPipelineAccess pa() {
-		Preconditions.checkNotNull(_pa);
-
-		return _pa;
-	}
-
-	@Override
-	public Operation2<GWorldModule> findPrelude(final String prelude_name) {
-		final Operation2<OS_Module> prelude = use.findPrelude(prelude_name);
-
-		if (prelude.mode() == Mode.SUCCESS) {
-			final OS_Module   m        = prelude.success();
-			final WorldModule prelude1 = _con.createWorldModule(m);
-
-			return Operation2.success(prelude1);
-		} else {
-			return Operation2.failure(prelude.failure()); // FIXME 10/15 chain
-		}
-	}
-
-	@Override
-	public Operation<Ok> maybeCheckFinishEventuals() {
-		return getFluffy().maybeCheckFinishEventuals();
-	}
-
-	@Override
-	public LCM lcm() {
-		return lcm;
-	}
 
 	@Override
 	public void set_pa(IPipelineAccess a_pa) {
@@ -802,11 +896,6 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		}
 	}
 
-	@Override
-	public CompilationEnclosure getCompilationEnclosure() {
-		// TODO Auto-generated method stub
-		return compilationEnclosure;
-	}
 
 	@Override
 	public EDL_CIS _cis() {
@@ -818,86 +907,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		return _con;
 	}
 
-	@NotNull
-	public List<CompilerInput> stringListToInputList(final @NotNull List<String> args) {
-		//noinspection UnnecessaryLocalVariable
-		final List<CompilerInput> inputs = args.stream()
-				.map(s -> {
-					final CompilerInput    input = new EDL_CompilerInput(s, Optional.of(this));
-					final CM_CompilerInput cm    = this.get(input);
-					if (cm.inpSameAs(s)) {
-						input.setSourceRoot();
-					} else {
-						assert false;
-					}
-					return input;
-				})
-				.collect(Collectors.toList());
-		return inputs;
-	}
-
-	public void testMapHooks(final List<IFunctionMapHook> ignoredAMapHooks) {
-		// pipelineLogic.dp.
-	}
-
-	public CP_Paths _paths() {
-		if (paths == null) {
-			throw new ProgramIsWrongIfYouAreHere("EDL_Compilation#_paths wasn't created yet");
-		}
-		return paths;
-	}
 
 	@Override
-	public <P> void register(final Eventual<P> aEventual) {
-		getFluffy().register(aEventual);
-	}
-
-	@Override
-	public void checkFinishEventuals() {
-		getFluffy().checkFinishEventuals();
-	}
-
-	@Override
-	public @NotNull String _host() {
-		return "EDL_Compilation";
-	}
-
-	@Override
-	public LangModel langModel() {
-		//return getFluffy().langModel();
-		if (this.langModel == null) {
-			this.langModel = new EDL_LangModel();
-			final CK_ObjectTree tree = this.getObjectTree();
-			tree.addSystemNode("models/lang", this.langModel);
-		}
-		return this.langModel;
-
-	}
-
-	/**
-	 * Convenience function
-	 *
-	 * @return
-	 */
-	@Override
-	public CompilerController feedInputsCon(final List<String> aStringList) {
-		final NonOpinionatedBuilder nob        = new NonOpinionatedBuilder();
-		// contrast with defaultCompilerController
-		final CompilerController    controller = nob.createCompilerController(this);
-		ccP.resolve(controller);
-		this.feedInputs(nob.inputs(aStringList), controller);
-		return controller;
-	}
-
-	final Eventual<CompilerController> ccP = new Eventual<>();
-
-	@Override
-	public void onConfig(final DoneCallback<IPersistentMap> cb) {
-		ccP.then(Scc-> Scc.onConfig(cb));
-	}
-
-	public void addInput3(final CompilerInput aInput, final @NotNull ElevatedInput3Callback cb) {
-		// Apparently this is Immediate.IMMEDIATE
-		cb.run(aInput, this.getCompilationClosure());
+	public boolean hasClojureSupport() {
+		return false;
 	}
 }

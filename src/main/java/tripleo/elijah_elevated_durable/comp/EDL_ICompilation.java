@@ -40,20 +40,11 @@ public interface EDL_ICompilation extends Compilation {
 
 	CM_Module megaGrande(OS_Module aModule);
 
-	@Override
-	IPipelineAccess pa();
-
-	@Override
-	Operation2<GWorldModule> findPrelude(String prelude_name);
-
 	void set_pa(IPipelineAccess a_pa);
 
 	void addCompilerInputWatcher(CN_CompilerInputWatcher aCNCompilerInputWatcher);
 
 	void compilerInputWatcher_Event(CN_CompilerInputWatcher.e aEvent, CompilerInput aCompilerInput, Object aO);
-
-	@Override
-	CompilationEnclosure getCompilationEnclosure();
 
 	EDL_CIS _cis();
 
@@ -68,33 +59,42 @@ public interface EDL_ICompilation extends Compilation {
 
 	ModuleBuilder moduleBuilder();
 
-	@Override
-	CP_Paths paths();
-
-	@Override
-	void pushItem(CompilerInstructions aci);
-
-	@Override
-	Finally reports();
-
 	void subscribeCI(@NotNull Observer<CompilerInstructions> aCio);
-
-	@Override
-	CompilationConfig cfg();
 
 	@Override
 	List<CompilerInput> getInputs();
 
 	@Override
-	void use(@NotNull CompilerInstructions compilerInstructions, USE_Reasoning aReasoning);
+	void pushItem(CompilerInstructions aci);
 
-	LivingRepo world();
+	@Override
+	void use(@NotNull CompilerInstructions compilerInstructions, USE_Reasoning aReasoning);
 
 	@Override
 	ElijahCache use_elijahCache();
 
 	@Override
 	void pushWork(PW_PushWork aInstance, PN_Ping aPing);
+
+	@Override
+	Finally reports();
+
+	@Override
+	CompilationConfig cfg();
+
+	@Override
+	CompilationEnclosure getCompilationEnclosure();
+
+	@Override
+	Operation2<GWorldModule> findPrelude(String prelude_name);
+
+	@Override
+	IPipelineAccess pa();
+
+	@Override
+	CP_Paths paths();
+
+	LivingRepo world();
 
 	CM_Module megaGrande(ElijahSpec aSpec, Operation2<OS_Module> aModuleOperation);
 
@@ -122,13 +122,14 @@ public interface EDL_ICompilation extends Compilation {
 
 	LangModel langModel();
 
-	CompilerController feedInputsCon(List<String> aStringList);
-
 	default void feedInputsCon2(List<String> aStringList) {
 		var x= feedInputsCon(aStringList);
-		int y=2;
+		NotImplementedException.raise_stop();
 	}
+
+	CompilerController feedInputsCon(List<String> aStringList);
 
 	void onConfig(DoneCallback<IPersistentMap>
 				  cb);
+
 }
