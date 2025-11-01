@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/elaveted-lein.iml" filepath="$PROJECT_DIR$/elaveted-lein.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/elevated-potential.iml" filepath="$PROJECT_DIR$/.idea/elevated-potential.iml" />
     </modules>
   </component>
 </project>
