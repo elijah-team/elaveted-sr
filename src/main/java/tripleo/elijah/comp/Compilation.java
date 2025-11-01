@@ -10,6 +10,7 @@ import tripleo.elijah.g.*;
 import tripleo.elijah.lang.i.*;
 import tripleo.elijah.nextgen.inputtree.*;
 import tripleo.elijah.nextgen.outputtree.*;
+import tripleo.elijah_elevated_durable.comp.*;
 import tripleo.elijah_fluffy.util.*;
 import tripleo.graph.*;
 import tripleo.paths.*;
@@ -92,6 +93,10 @@ public interface Compilation /*extends GCompilation*/ {
 	void spi(Object aObject);
 
 	CompilationInterfaceRevised revised();
+
+	void post(Postable aPostable);
+
+	boolean hasClojureSupport();
 
 	class CompilationConfig implements GCompilationConfig {
 		public boolean showTree = false;

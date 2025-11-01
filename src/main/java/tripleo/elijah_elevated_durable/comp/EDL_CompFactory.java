@@ -67,7 +67,9 @@ class EDL_CompFactory implements CompFactory {
 	@Contract(" -> new")
 	@Override
 	public CK_ObjectTree createObjectTree() {
-		return new EDL_ObjectTree(compilation);
+		final EDL_ObjectTree res = new EDL_ObjectTree();
+		compilation.post((Postable) res);
+		return res;
 	}
 
 	@Contract("_ -> new")
