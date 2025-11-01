@@ -77,7 +77,7 @@
   (let [file-name "test/demo-el-normal/main2"
         active true]
     (if (true? active)
-      (Main/main2 (list file-name))))
+      (Main/main3 (list file-name) {})))
 
   ;(doto (InstrumentalTest1Test.)
   ;  (.chunkyExample))
