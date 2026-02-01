@@ -3,4 +3,4 @@ Elijah elaveted-potential
 
 tldr: clojure 
 
-lein for now
+leiningen for now
