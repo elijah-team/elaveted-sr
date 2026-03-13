@@ -9,7 +9,7 @@
 package tripleo.elijah_elevated_durable.comp;
 
 import clojure.lang.*;
-import com.google.common.base.*;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
 import io.reactivex.rxjava3.core.*;
 import io.reactivex.rxjava3.core.Observer;
@@ -286,7 +286,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	public <T> void addInput(final EOT_Nameable aNameable,
 							 final EIT_InputType ty,
 							 final @NotNull Class<T> aClass,
-							 final Supplier<T> aSupplier) {
+							 final java.util.function.Supplier<T> aSupplier) {
 		reports().addInput(aNameable, ty);
 		if (aClass.isAssignableFrom(OS_Module.class)) {
 
@@ -834,7 +834,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 
 	@Override
-	public void addCodeOutput(final EOT_FileNameProvider aFileNameProvider, final Supplier<EOT_OutputFile> aOutputFileSupplier, final boolean addFlag) {
+	public void addCodeOutput(final EOT_FileNameProvider aFileNameProvider, final java.util.function.Supplier<EOT_OutputFile> aOutputFileSupplier, final boolean addFlag) {
 		final EOT_OutputFile eof = aOutputFileSupplier.get();
 		final Finally.Output e   = reports().addCodeOutput(aFileNameProvider, eof);
 		if (addFlag) {
