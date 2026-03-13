@@ -11,7 +11,6 @@ package tripleo.elijah_elevated_durable.comp;
 import clojure.lang.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
-import io.reactivex.rxjava3.core.*;
 import io.reactivex.rxjava3.core.Observer;
 import org.apache.commons.lang3.tuple.*;
 import org.jdeferred2.*;
@@ -44,7 +43,6 @@ import tripleo.elijah_durable_elevated.stages.deduce.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.i.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.impl.*;
 import tripleo.elijah_durable_elevated.stages.logging.*;
-import tripleo.elijah_durable_elevated.world.i.*;
 import tripleo.elijah_durable_elevated.world.i.LivingRepo;
 import tripleo.elijah_elevated_durable.backbone.*;
 import tripleo.elijah_elevated_durable.comp.input.*;
@@ -54,7 +52,7 @@ import tripleo.graph.*;
 import tripleo.paths.*;
 
 import java.util.*;
-import java.util.Optional;
+import java.util.function.*;
 import java.util.stream.*;
 
 public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
@@ -101,8 +99,8 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	private                ICompilationAccess3                                            compilationAccess3;
 	private                CPX_Signals                                                    cpxSignals;
 	private                CompilationInterfaceRevised2                                   revised2;
-	private       EDL_LangModel             langModel;
-	private final Eventual<EDL_Compilation> cEv =new Eventual<>();
+	private                EDL_LangModel langModel;
+	private Eventual<EDL_Compilation>    postEv = new Eventual<>();
 
 	public EDL_Compilation(final @NotNull ErrSink aErrSink, final IO aIo) {
 		errSink            = aErrSink;
@@ -175,16 +173,14 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public String getProjectName() {
 		return getRootCI().getName();
+	}	@Override
+	public int errorCount() {
+		return errSink.errorCount();
 	}
 
 	@Override
 	public CompilerInstructions getRootCI() {
 		return cci_listener._root();
-	}
-
-	@Override
-	public int errorCount() {
-		return errSink.errorCount();
 	}
 
 	public static EDL_ElLog.@NotNull Verbosity gitlabCIVerbosity() {

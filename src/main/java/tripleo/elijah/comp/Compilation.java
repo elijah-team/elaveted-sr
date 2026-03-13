@@ -93,11 +93,11 @@ public interface Compilation /*extends GCompilation*/ {
 
 	CompilationInterfaceRevised revised();
 
-	void post(OnCompilation aPostable);
+	void post(OnCompilation aOnCompilation);
 
 	boolean hasClojureSupport();
 
-	class CompilationConfig implements GCompilationConfig {
+	public class CompilationConfig implements GCompilationConfig {
 		public boolean showTree = false;
 		public boolean silent   = false;
 
