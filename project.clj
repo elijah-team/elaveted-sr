@@ -88,6 +88,12 @@
    [lein-marginalia "0.9.2"]
    [lein-javac "1.2.1-SNAPSHOT"]]
 
+  :pom-addition
+  [:properties
+   [:maven.compiler.source "17"]
+   [:maven.compiler.target "17"]
+   [:maven.compiler.release "17"]]
+
   :clean-targets ^{:protect false} ["target/public"]
   :aliases
   {"fig"       ["trampoline" "run" "-m" "figwheel.main"]
