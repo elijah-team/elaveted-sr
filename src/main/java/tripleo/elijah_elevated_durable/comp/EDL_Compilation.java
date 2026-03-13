@@ -61,15 +61,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	private final          Map<CompilerInput, CM_CompilerInput>                           _ci_models;
 	private final          List<Triple<CN_CompilerInputWatcher.e, CompilerInput, Object>> _ciw_buffer;
 	private final          FluffyCompImpl                                                 _fluffyComp;
-	//	@Getter
 	private final          CompilationConfig                                              cfg;
-	//	@Getter
 	private final          CompilationEnclosure                                           compilationEnclosure;
-	//	@Getter
 	private final          EDL_CIS                                                        _cis;
-	//	@Getter
-//	private final CK_Monitor                          defaultMonitor;
-//	@Getter
 	private final          USE                                                            use;
 	private final          CompFactory                                                    _con;
 	private final          LivingRepo                                                     _repo;
