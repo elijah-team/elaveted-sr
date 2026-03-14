@@ -30,13 +30,12 @@ import tripleo.graph.*;
 import tripleo.paths.*;
 
 import java.util.*;
-import java.util.function.*;
 
 // TODO 01/19 might be fluffy
 public interface EDL_ICompilation extends Compilation {
 	CompilationInterfaceRevised2 revised2();
 
-	<T> void addInput(final EOT_Nameable aNameable, final EIT_InputType ty, final Class<T> aClass, final Supplier<T> aSupplier);
+	<T> void addInput(final EOT_Nameable aNameable, final EIT_InputType ty, final Class<T> aClass, final java.util.function.Supplier<T> aSupplier);
 
 	CM_Module megaGrande(OS_Module aModule);
 
@@ -132,4 +131,5 @@ public interface EDL_ICompilation extends Compilation {
 	void onConfig(DoneCallback<IPersistentMap>
 				  cb);
 
+	void _doOnCompilation(EDL_Compilation aEdlCompilation);
 }

@@ -21,7 +21,9 @@ public enum CompilationFactory {
 
 	@Contract("_, _ -> new")
 	public static @NotNull EDL_Compilation mkCompilation(final ErrSink eee, final IO io) {
-		return new EDL_Compilation(eee, io);
+		final EDL_Compilation edlCompilation = new EDL_Compilation(eee, io);
+		edlCompilation._doOnCompilation(edlCompilation);
+		return edlCompilation;
 	}
 
 	public static @NotNull EDL_Compilation mkCompilation2(final List<IFunctionMapHook> aMapHooks) {

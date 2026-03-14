@@ -57,7 +57,9 @@
    [org.jetbrains/annotations "24.1.0"]
    ;; [org.checkerframework/checker-qual "3.42.0"]
 
-   [org.slf4j/slf4j-simple "1.7.25"]]
+   [org.slf4j/slf4j-api "1.7.25"]
+   [org.slf4j/slf4j-simple "1.7.25"]
+   ]
 
   :source-paths
   ["src/main/clojure"]
@@ -91,6 +93,12 @@
   :aliases
   {"fig"       ["trampoline" "run" "-m" "figwheel.main"]
    "fig:build" ["trampoline" "run" "-m" "figwheel.main" "-b" "flappy" "-r"]}
+
+ :pom-addition
+ [:properties
+  [:maven.compiler.source "17"]
+  [:maven.compiler.target "17"]
+  [:maven.compiler.release "17"]]
 
   ;{:user {:plugins [[venantius/ultra "0.6.0"]]}}
   )

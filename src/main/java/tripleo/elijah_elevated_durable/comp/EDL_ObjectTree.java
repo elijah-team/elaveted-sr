@@ -12,7 +12,7 @@ import tripleo.elijah_fluffy.util.*;
 import tripleo.graph.*;
 import tripleo.paths.*;
 
-public class EDL_ObjectTree implements CK_ObjectTree , Postable {
+public class EDL_ObjectTree implements CK_ObjectTree , OnCompilation {
 	private @ElLateInit EDL_Compilation compilation;
 	private @ElLateInit  EIT_ModuleList  moduleList;
 
@@ -96,7 +96,7 @@ public class EDL_ObjectTree implements CK_ObjectTree , Postable {
 	}
 
 	@Override
-	public void accept(final Compilation aCompilation) {
+	public void onCompilation(final Compilation aCompilation) {
 		if (aCompilation instanceof EDL_Compilation) {
 			compilation = (EDL_Compilation) aCompilation;
 			if (compilation.hasClojureSupport()) {}else {

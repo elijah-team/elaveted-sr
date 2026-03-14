@@ -32,8 +32,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Run tests
-        run: ./lein test #mvn test
+      - name: Run leiningen
+        run: ./lein uberjar
 
-      - name: Use all free minutes
-         run: true ./lein uberjar
+      - name: Run it backwards
+        run: ./lein pom && mvn clean verify package

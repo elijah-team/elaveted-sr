@@ -33,7 +33,7 @@ public class CW_sourceDirRequest {
 					   },
 					   EIT_InputType.ELIJAH_SOURCE,
 					   OS_Module.class,
-					   () -> _inputTransformCallback(ffom, file));
+					   (java.util.function.Supplier) () -> _inputTransformCallback(ffom, file));
 		}
 	}
 

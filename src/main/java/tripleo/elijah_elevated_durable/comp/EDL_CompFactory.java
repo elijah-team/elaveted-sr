@@ -68,7 +68,7 @@ class EDL_CompFactory implements CompFactory {
 	@Override
 	public CK_ObjectTree createObjectTree() {
 		final EDL_ObjectTree res = new EDL_ObjectTree();
-		compilation.post((Postable) res);
+		compilation.post((OnCompilation) res);
 		return res;
 	}
 

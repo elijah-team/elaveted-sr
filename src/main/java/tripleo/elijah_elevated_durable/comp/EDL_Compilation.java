@@ -54,7 +54,7 @@ import tripleo.graph.*;
 import tripleo.paths.*;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.Optional;
 import java.util.stream.*;
 
 public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
@@ -101,7 +101,8 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	private                ICompilationAccess3                                            compilationAccess3;
 	private                CPX_Signals                                                    cpxSignals;
 	private                CompilationInterfaceRevised2                                   revised2;
-	private                EDL_LangModel                                                  langModel;
+	private       EDL_LangModel             langModel;
+	private final Eventual<EDL_Compilation> cEv =new Eventual<>();
 
 	public EDL_Compilation(final @NotNull ErrSink aErrSink, final IO aIo) {
 		errSink            = aErrSink;
@@ -174,14 +175,16 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public String getProjectName() {
 		return getRootCI().getName();
-	}	@Override
-	public int errorCount() {
-		return errSink.errorCount();
 	}
 
 	@Override
 	public CompilerInstructions getRootCI() {
 		return cci_listener._root();
+	}
+
+	@Override
+	public int errorCount() {
+		return errSink.errorCount();
 	}
 
 	public static EDL_ElLog.@NotNull Verbosity gitlabCIVerbosity() {
@@ -191,7 +194,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 	public static boolean isGitlab_ci() {
 		return System.getenv("GITLAB_CI") != null;
-	}	@Override
+	}
+
+	@Override
 	public void feedCmdLine(final @NotNull List<String> args) {
 		final CompilerController controller = new EDL_CompilerController(this.getCompilationAccess3());
 		ccP.resolve(controller);
@@ -309,7 +314,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public Finally reports() {
 		return _finally;
-	}	@Override
+	}
+
+	@Override
 	public void feedInputs(final @NotNull List<CompilerInput> aCompilerInputs,
 						   final @NotNull CompilerController aController) {
 		if (aCompilerInputs.isEmpty()) {
@@ -492,7 +499,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public LivingRepo world() {
 		return _repo;
-	}	@Override
+	}
+
+	@Override
 	public void setIO(final IO io) {
 		this.io = io;
 	}
@@ -546,7 +555,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public void subscribeCI(final @NotNull Observer<CompilerInstructions> aCio) {
 		_cis.subscribe(aCio);
-	}	@Override
+	}
+
+	@Override
 	public void pushItem(CompilerInstructions aci) {
 		if (xxx.contains(aci)) {
 			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("** [CompilerInstructions::pushItem] duplicate instructions: " + aci.getFilename());
@@ -630,7 +641,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		ccP.resolve(controller);
 		this.feedInputs(nob.inputs(aStringList), controller);
 		return controller;
-	}	@Override
+	}
+
+	@Override
 	public void use(@NotNull final CompilerInstructions compilerInstructions, final USE_Reasoning aReasoning) {
 		if (aReasoning.ty() == USE_Reasoning.Type.USE_Reasoning__findStdLib) {
 			pushItem(compilerInstructions);
@@ -659,7 +672,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public <P> void register(final Eventual<P> aEventual) {
 		getFluffy().register(aEventual);
-	}	@Override
+	}
+
+	@Override
 	public ElijahCache use_elijahCache() {
 		return use.getElijahCache();
 	}
@@ -677,15 +692,12 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	public void addInput3(final CompilerInput aInput, final @NotNull ElevatedInput3Callback cb) {
 		// Apparently this is Immediate.IMMEDIATE
 		cb.run(aInput, this.getCompilationClosure());
-	}	@Override
+	}
+
+	@Override
 	public void pushWork(final PW_PushWork aInstance, final PN_Ping aPing) {
 		((PW_CompilerController) pw_controller).submitWork(aInstance);
 	}
-
-
-
-
-
 
 
 	/**
@@ -776,18 +788,6 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 			}
 		};
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	//@Override
 	//public PW_CompilerController get_pw() {
@@ -911,5 +911,15 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public boolean hasClojureSupport() {
 		return false;
+	}
+
+	@Override
+	public void _doOnCompilation(final EDL_Compilation aEdlCompilation) {
+		cEv.resolve(aEdlCompilation);
+	}
+
+	@Override
+	public void post(final OnCompilation aPostable) {
+		cEv.then(aPostable::onCompilation);
 	}
 }
