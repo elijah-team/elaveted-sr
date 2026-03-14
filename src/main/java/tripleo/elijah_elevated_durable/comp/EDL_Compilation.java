@@ -905,11 +905,11 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 	@Override
 	public void _doOnCompilation(final EDL_Compilation aEdlCompilation) {
-		cEv.resolve(aEdlCompilation);
+		postEv.resolve(aEdlCompilation);
 	}
 
 	@Override
 	public void post(final OnCompilation aPostable) {
-		cEv.then(aPostable::onCompilation);
+		postEv.then(aPostable::onCompilation);
 	}
 }
