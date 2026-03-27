@@ -29,14 +29,14 @@
 
    [com.google.guava/guava "33.0.0-jre"]
 
-   [io.smallrye.reactive/mutiny "2.5.8"]
-   [org.awaitility/awaitility "4.2.0"]
+   ;[io.smallrye.reactive/mutiny "2.5.8"]
+   ;[org.awaitility/awaitility "4.2.0"]
 
-   [funcool/promesa "11.0.678"]
-   [party.donut/system "1.0.255"]
+   ;[funcool/promesa "11.0.678"]
+   ;[party.donut/system "1.0.255"]
    ;[integrant "0.8.1"] ; maybe
    [missionary/missionary "b.36"]
-   [metosin/malli "0.17.0"]
+   ;[metosin/malli "0.17.0"]
 
    ;; https://github.com/clj-commons/aleph/commit/998a32a5ed9ada581fa73a389fbb0df43e8dd2d2
    [aleph "0.8.3"]
@@ -58,7 +58,7 @@
    ;; [org.checkerframework/checker-qual "3.42.0"]
 
    [org.slf4j/slf4j-api "1.7.25"]
-   [org.slf4j/slf4j-simple "1.7.25"]]
+   [org.slf4j/slf4j-nop "1.7.25"]]
 
   :source-paths
   ["src/main/clojure"]
@@ -89,7 +89,7 @@
   :plugins
   [;[dev.weavejester/lein-cljfmt "0.12.0"]
   ;[lein-marginalia "0.9.2"]
-  ;[lein-javac "1.2.1-SNAPSHOT"]
+  [lein-javac "1.2.1-SNAPSHOT"]
     ]
 
   :pom-addition
