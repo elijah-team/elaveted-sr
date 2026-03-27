@@ -10,7 +10,7 @@
                   ;"./out/production/evelated-potential/:dist/lib/annotations-24.1.0.jar"
                   ]
   :dependencies
-  [[org.clojure/clojure "1.12.0"]
+  [[org.clojure/clojure "1.12.4"]
 
    ;[org.clojure/spec.alpha "0.5.238"]
    ;[org.clojure/core.specs.alpha "0.4.74"]
@@ -98,16 +98,4 @@
    [:maven.compiler.target "17"]
    [:maven.compiler.release "17"]]
 
-  :clean-targets ^{:protect false} ["target/public"]
-  :aliases
-  {"fig"       ["trampoline" "run" "-m" "figwheel.main"]
-   "fig:build" ["trampoline" "run" "-m" "figwheel.main" "-b" "flappy" "-r"]}
-
- :pom-addition
- [:properties
-  [:maven.compiler.source "17"]
-  [:maven.compiler.target "17"]
-  [:maven.compiler.release "17"]]
-
-  ;{:user {:plugins [[venantius/ultra "0.6.0"]]}}
-  )
+  :clean-targets ^{:protect false} ["target/public"])
