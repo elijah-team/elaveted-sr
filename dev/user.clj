@@ -1,18 +1,14 @@
-(ns user)
+(ns user
+  (:require [clojure.repl :refer :all]
+            [clojure.tools.namespace.repl :refer [refresh refresh-all]]
 
-;(ns user
-;  (:require [clojure.java.io :as io]
-;            [clojure.string :as str]
-;            [clojure.pprint :refer (pprint)]
-;            [clojure.repl :refer :all]
-;            [clojure.test :as test]
-;            [clojure.tools.namespace.repl :refer (refresh refresh-all)]
-;    ;[com.example.my-project.system :as system]
-;            ))
-;
-;(def system nil)
-;
-;
+    ;[com.example.my-project.system :as system]
+
+            [tripleo.el-entry-point :as tep]))
+
+(def system nil)
+
+
 ;(defn init
 ;  "Constructs the current development system."
 ;  []
@@ -22,8 +18,15 @@
 (defn start
   "Starts the current development system."
   []
-;  (alter-var-root #'system system/start))
-  )
+  ;  (alter-var-root #'system system/start))
+
+  (let [c1 (tep/el-make-chan)
+        r1 (tep/el-run-loop [c1])]
+
+    (tep/el-nothing)))
+
+
+
 
 ;(defn stop
 ;  "Shuts down and destroys the current development system."
