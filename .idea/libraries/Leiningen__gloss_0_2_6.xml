@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: gloss:0.2.6">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/gloss/gloss/0.2.6/gloss-0.2.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

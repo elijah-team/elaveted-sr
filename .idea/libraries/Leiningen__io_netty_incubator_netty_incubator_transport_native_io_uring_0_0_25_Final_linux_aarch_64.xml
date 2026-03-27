@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: io.netty.incubator/netty-incubator-transport-native-io_uring:0.0.25.Final:linux-aarch_64">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/incubator/netty-incubator-transport-native-io_uring/0.0.25.Final/netty-incubator-transport-native-io_uring-0.0.25.Final-linux-aarch_64.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
