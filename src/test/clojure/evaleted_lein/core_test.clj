@@ -1,15 +1,10 @@
 (ns evaleted-lein.core-test
-  ;  (:use   [clojure.pprint :refer pp])
   (:require [clojure.test :refer :all]
-            [evaleted-lein.core :refer :all]
-
-            )
+            [evaleted-lein.core :refer :all])
+  (:use [clojure.pprint :refer pp])
   (:import (java.util ArrayList)
-           (tripleo.elijah ElijahCon Main)
-    ;(tripleo.elijah_congenial.test_support InstrumentalTest1Test)
-           (tripleo.elijah.comp.i CompilerController)
-           (tripleo.elijah_clojure.example CljExampleMain)
-           (tripleo.elijah_durable_elevated.factory NonOpinionatedBuilder)))
+           (tripleo.elijah Main)
+           (tripleo.elijah_clojure.example CljExampleMain)))
 
 (deftest a-test
   (testing "FIXME, I fail."
@@ -33,14 +28,14 @@
       (is (= (.errorCount ctl) 1)))))
 
 (defn hello []
-  ;(println 6)
-  "heavenly")
+  (println 6)
+  "non-existent")
 
 (deftest c-test
   (testing "FIXME, 3"
-    (is (= "heavenly" (CljExampleMain/callClojure "evaleted-lein.core-test" "hello")))))
+    (is (= "non-existent" (CljExampleMain/callClojure "evaleted-lein.core-test" "hello")))))
 
 (deftest d-test
   (testing "FIXME, 4"
     (is (= 1 1)
-        (= "heavenly" (CljExampleMain/callClojure2)))))
+        (= "non-existent" (CljExampleMain/callClojure2)))))
