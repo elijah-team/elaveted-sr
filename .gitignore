@@ -21,3 +21,11 @@
 ./is-debugging.flag
 /elijah-elaveted-potential/elevated-potential-2/is-debugging.flag
 /.lein-failures
+/.clj-kondo/.cache/v1/
+/.clj-kondo/imports/
+/target-/
+/.lsp/.cache/db.transit.json
+/.lein-repl-history
+/.nrepl-port
+/.calva/repl.calva-repl
+elaveted-lein.iml
