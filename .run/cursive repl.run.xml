@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cursive repl" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+    <option name="configVersion" value="1" />
+    <option name="displayName" value="cursive repl" />
+    <option name="focusEditor" value="true" />
+    <module name="elaveted-lein" />
+    <option name="options" />
+    <option name="profiles" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <method v="2" />
+  </configuration>
+</component>
