@@ -277,23 +277,27 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 				@Override
 				public void addLog(final ElLog aLog) {
-					getComp().getCompilationEnclosure().addLog(aLog);
+					getCompilationEnclosure().addLog(aLog);
+				}
+
+				private CompilationEnclosure getCompilationEnclosure() {
+					return getComp().getCompilationEnclosure();
 				}
 
 				@Override
 				public List<ElLog> getLogs() {
-					return getComp().getCompilationEnclosure().getLogs();
+					return getCompilationEnclosure().getLogs();
 				}
 
 				@Override
 				public void writeLogs(final boolean aSilent) {
 					assert !aSilent;
-					getComp().getCompilationEnclosure().writeLogs();
+					getCompilationEnclosure().writeLogs();
 				}
 
 				@Override
 				public PipelineLogic getPipelineLogic() {
-					return getComp().getCompilationEnclosure().getPipelineLogic();
+					return getCompilationEnclosure().getPipelineLogic();
 				}
 			};
 		}

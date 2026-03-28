@@ -5,12 +5,17 @@ import org.jdeferred2.impl.*;
 import org.jetbrains.annotations.*;
 import tripleo.elijah_fluffy.diagnostic.*;
 
+@SuppressWarnings("LombokGetterMayBeUsed")
 public class Eventual<P> {
 	private final String                              mDescription;
 	private final DeferredObject<P, Diagnostic, Void> prom = new DeferredObject<>();
 
 	// This is not final so it can change it's spots??
 	private EventualBehavior<P> beh = new DefaultEventualBehavior<>();
+
+	{
+		beh.setParent(this);
+	}
 
 	public Eventual(String aDescription) {
 		mDescription = aDescription;
@@ -86,6 +91,10 @@ public class Eventual<P> {
 
 	public static <T> Eventual<T> finished(T value) {
 		return new Eventual<>(new AlreadyEventualBehavior<>(value));
+	}
+
+	public static <T> Eventual<T> failed(Diagnostic value) {
+		return new Eventual<>(new FailedEventualBehavior<>(value));
 	}
 
 	private static class DefaultEventualBehavior<P> implements EventualBehavior<P> {
@@ -218,6 +227,12 @@ public class Eventual<P> {
 
 	private static class FailedEventualBehavior<P> implements EventualBehavior<P> {
 
+		private final Diagnostic d;
+
+		public FailedEventualBehavior(final Diagnostic aValue) {
+			this.d = aValue;
+		}
+
 		@Override
 		public void resolve(final P p) {
 			throw new IllegalStateException();
@@ -266,6 +281,10 @@ public class Eventual<P> {
 		@Override
 		public void setParent(final Eventual<P> parent) {
 			throw new IllegalStateException();
+		}
+
+		public Diagnostic getD() {
+			return d;
 		}
 	}
 

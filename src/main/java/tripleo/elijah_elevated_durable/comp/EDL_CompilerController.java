@@ -17,32 +17,44 @@ import java.util.*;
 import java.util.function.*;
 
 public class EDL_CompilerController implements CompilerController {
-	private final Eventual<IPersistentMap> configP        = new Eventual<>();
-	private final List<EventualRegister>   allRegisters   = new ArrayList<>();
-	private final ICompilationAccess3      ca3;
-	private       ICompilationBus          cb;
-	private       List<CompilerInput>      inputs;
-	private       EDL_ICompilation         c;
-	private final CK_Markers               processMarkers =
-			// fixme (groovy,vavr,kotlin, *clj!!*): LazyKt.lazy();
-			(new Supplier<CK_Markers>() {
-				@Override
-				public CK_Markers get() {
-					final CK_Markers res = new CK_Markers() {
-						@Override
-						public void add(final CK_Marker aCKMarker) {
-							revised().addMarker(aCKMarker);
-						}
+	private final     Eventual<IPersistentMap>   configP      = new Eventual<>();
+	private final     List<EventualRegister>     allRegisters = new ArrayList<>();
+	private final     ICompilationAccess3        compilationAccess3;
+	private           ICompilationBus            cb;
+	private           List<CompilerInput>        inputs;
+	private @Nullable EDL_ICompilation           c;
+	private final     Eventual<EDL_ICompilation> cP           = new Eventual<>("Controller::Compilation");
+	/// fixme (groovy,vavr,kotlin, *clj!!*): LazyKt.lazy();
+	private final     CK_Markers                 processMarkers;
 
-						@Override
-						public int size() {
-							return revised().markerCount();
-						}
-					};
-					res.add(new CK_Marker(){
+	public EDL_CompilerController(final ICompilationAccess3 aCompilationAccess3) {
+		compilationAccess3 = aCompilationAccess3;
+		assert compilationAccess3.getComp() != null;
+		processMarkers = (new Supplier<CK_Markers>() {
+			{
+				//NotImplementedException.raise_stop();
+			}
+
+			@Override
+			public CK_Markers get() {
+
+				final CK_Markers res = new CK_Markers() {
+					@Override
+					public void add(final CK_Marker aCKMarker) {
+						revised().addMarker(aCKMarker);
+					}
+
+					@Override
+					public int size() {
+						return revised().markerCount();
+					}
+				};
+				final String s = "/compiler-controller/0";// + (res.size());
+				cP.then(Sc -> {
+					res.add(new CK_Marker() {
 						@Override
 						public String getPath() {
-							return "/compiler-controller/"+(res.size());
+							return s;
 						}
 
 						@Override
@@ -51,16 +63,16 @@ public class EDL_CompilerController implements CompilerController {
 						}
 
 					});
-					return res;
-				}
-			}).get();
-
-	public EDL_CompilerController(final ICompilationAccess3 aCa3) {
-		ca3 = aCa3;
+				});
+				return res;
+			}
+		}).get();
+		NotImplementedException.raise_stop();
 	}
 
 	public void _setInputs(final Compilation aCompilation, final List<CompilerInput> aInputs) {
-		c      = (EDL_ICompilation) aCompilation;
+		cP.resolve((EDL_ICompilation) aCompilation);
+		cP.then(Sc -> c = Sc);
 		inputs = aInputs;
 	}
 
@@ -77,16 +89,29 @@ public class EDL_CompilerController implements CompilerController {
 
 	@Override
 	public Operation<Ok> processOptions() {
-		final OptionsProcessor             op                   = new ApacheOptionsProcessor();
-		final CompilerInstructionsObserver cio                  = new CompilerInstructionsObserver(c);
-		final CompilationEnclosure         compilationEnclosure = c.getCompilationEnclosure();
+		assert cP.isResolved();
+		class DoneCallback2 implements DoneCallback<EDL_ICompilation> {
+			private Operation<Ok> xx;
 
-		compilationEnclosure.setCompilationAccess(c.con().createCompilationAccess());
-		compilationEnclosure.setCompilationBus(cb = c.con().createCompilationBus());
+			@Override
+			public void onDone(final EDL_ICompilation result) {
 
-		c._cis().set_cio(cio);
+				final OptionsProcessor             op  = new ApacheOptionsProcessor();
+				final CompilerInstructionsObserver cio = new CompilerInstructionsObserver(c);
+				assert c != null;
+				final CompilationEnclosure compilationEnclosure = c.getCompilationEnclosure();
 
-		return op.process(c, inputs, cb); // TODO 09/08 Make this more complicated
+				compilationEnclosure.setCompilationAccess(c.con().createCompilationAccess());
+				compilationEnclosure.setCompilationBus(cb = c.con().createCompilationBus());
+
+				c._cis().set_cio(cio);
+
+				this.xx = op.process(c, inputs, cb); // TODO 09/08 Make this more complicated
+			}
+		};
+		final DoneCallback2 cb1 = new DoneCallback2();
+		cP.then(cb1);
+		return cb1.xx;
 	}
 
 	@Override
@@ -138,6 +163,10 @@ public class EDL_CompilerController implements CompilerController {
 		V.exit();
 	}
 
+	public ICompilationAccess3 getCompilationAccess3() {
+		return compilationAccess3;
+	}
+
 	public static class _DefaultCon implements Con {
 		@Override
 		public EDL_CompilationRunner newCompilationRunner(final ICompilationAccess compilationAccess) {
@@ -167,16 +196,18 @@ public class EDL_CompilerController implements CompilerController {
 
 	@Override
 	public CompilationInterfaceRevised revised() {
-		return this.c.revised();
+		return this.c != null ? this.c.revised() : null;
 	}
 
 	@Override
 	public CompilationInterfaceRevised2 revised2() {
+		assert this.c != null;
 		return this.c.revised2();
 	}
 
 	@Override
 	public int errorCount() {
+		assert this.c != null;
 		return this.c.errorCount();
 	}
 }
