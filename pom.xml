@@ -8,7 +8,10 @@
   <name>elaveted-lein</name>
   <description/>
   <scm>
-    <tag>6d7c0291215f6bce0ffabdc7e3020c23163b6d4a</tag>
+    <url>https://github.com/elijah-tng/elevated-potential</url>
+    <connection>scm:git:git://github.com/elijah-tng/elevated-potential.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/elijah-tng/elevated-potential.git</developerConnection>
+    <tag>d039ea9be74ba6af0956262e5c9b7d24d5224838</tag>
   </scm>
   <build>
     <sourceDirectory>src/main/clojure</sourceDirectory>
@@ -77,7 +80,7 @@
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.12.0</version>
+      <version>1.12.4</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -85,34 +88,9 @@
       <version>33.0.0-jre</version>
     </dependency>
     <dependency>
-      <groupId>io.smallrye.reactive</groupId>
-      <artifactId>mutiny</artifactId>
-      <version>2.5.8</version>
-    </dependency>
-    <dependency>
-      <groupId>org.awaitility</groupId>
-      <artifactId>awaitility</artifactId>
-      <version>4.2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>funcool</groupId>
-      <artifactId>promesa</artifactId>
-      <version>11.0.678</version>
-    </dependency>
-    <dependency>
-      <groupId>party.donut</groupId>
-      <artifactId>system</artifactId>
-      <version>1.0.255</version>
-    </dependency>
-    <dependency>
       <groupId>missionary</groupId>
       <artifactId>missionary</artifactId>
       <version>b.36</version>
-    </dependency>
-    <dependency>
-      <groupId>metosin</groupId>
-      <artifactId>malli</artifactId>
-      <version>0.17.0</version>
     </dependency>
     <dependency>
       <groupId>aleph</groupId>
@@ -166,21 +144,15 @@
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
+      <artifactId>slf4j-nop</artifactId>
       <version>1.7.25</version>
     </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>tools.namespace</artifactId>
-      <version>0.2.3</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>java.classpath</artifactId>
-      <version>0.2.0</version>
-      <scope>test</scope>
-    </dependency>
+	  <dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.13.1</version>
+		  <scope>test</scope>
+	  </dependency>
   </dependencies>
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
