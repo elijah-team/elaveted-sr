@@ -1,8 +1,9 @@
 (ns evaleted-lein.core-test
   (:require [clojure.test :refer :all]
             [evaleted-lein.core :refer :all]
-            [tripleo.el-entry-point :as tep])
-  (:use [clojure.pprint :refer pp])
+            [tripleo.el-entry-point :as tep]
+            ;[clojure.pprint :refer pp ]
+            )
   (:import (java.util ArrayList)
            (tripleo.elijah Main)
            (tripleo.elijah_clojure.example CljExampleMain)))
