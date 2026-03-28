@@ -778,12 +778,13 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 						@Override
 						public Cursor<CK_Log> perFile(final CE_Path p) {
+							NotImplementedException.raise_stop();
 							return null;
 						}
 
 						@Override
 						public void writeToPath(final CE_Path p, final EG_Statement stmt) {
-							int y = 2;
+							NotImplementedException.raise_stop();
 						}
 
 						@Override

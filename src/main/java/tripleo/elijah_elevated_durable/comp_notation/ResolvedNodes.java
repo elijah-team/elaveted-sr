@@ -10,7 +10,7 @@ import tripleo.elijah_elevated_durable.comp.*;
 import java.util.*;
 
 class ResolvedNodes {
-	final         List<EvaNode>  resolved_nodes = new ArrayList<EvaNode>();
+	final         List<EvaNode>  resolved_nodes = new ArrayList<>();
 	private final ICodeRegistrar cr;
 
 	public ResolvedNodes(final ICodeRegistrar aCr) {

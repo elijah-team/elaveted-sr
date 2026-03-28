@@ -18,6 +18,7 @@ public interface FluffyComp extends EventualRegister {
 	@Override
 	<P> void register(Eventual<P> e);
 
+	@Override
 	Operation<Ok> maybeCheckFinishEventuals();
 
 	Eventual<CK_SourceFile> exchange(ILazyCompilerInstructions_.FX_Ez aFXEz);
