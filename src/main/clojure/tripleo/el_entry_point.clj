@@ -1,31 +1,55 @@
 (ns tripleo.el-entry-point
   ;; (:require [promesa.core :as p])
+  (:import [java.util HashMap])
   (:require [promesa.exec.csp :as sp]))
 
 (defn el-make-chan [] (sp/chan))
 
+(def ;once 
+  ccd ;{}
+  (HashMap.))
+
+(defn nameof [cc]
+  (if (.containsKey ccd cc) (.get ccd cc) (let [s (.size ccd)]
+                                            (do (.put ccd (str "name" s))
+                                                s)))
+  (.toString cc))
+
+
 (defn el-run-loop [chans]
   (let [control (sp/chan)]
     ;;;; @
-    (sp/go                                                  ;; die after 5s, go!!
-      (sp/take! (sp/timeout-chan 5000))                     ;; was 5000
-      (sp/>! control ["bye" nil]))
-    (let [_ 1]
+    (println "aa" (sp/go                                                  ;; die after 5s, go!!
+                    (sp/take! (sp/timeout-chan 5000))                     ;; was 5000
+                    (sp/>! control ["bye" nil])))
+    (let [n 0]
       (sp/go-loop []
                   ; race: first of control or anything else
-                  (let [[v ch] (sp/alts! (cons control chans))]
-                    (when v
-                      (if (= ch control)
+        (let [[v ch] (sp/alts! (cons control chans))]
+          (when v
+
+
+
+            (if (> n 50)
+              nil
+
+
+              (if (= ch control)
                         ; if control, print and quit
-                        (loop [x 0] (do (if (and (vector? v)
-                                                 (= (first v) "bye")
-                                                 (= (second v) nil))
-                                          nil
-                                          (println "1Read" v "from" ch)))
+                (loop [x 0] (do (if (and (vector? v)
+                                         (= (first v) "bye")
+                                         (= (second v) nil))
+                                  nil
+                                  (do (println "1Read" v "from" (nameof ch))
+                                      (sp/take! (sp/timeout-chan 1000)))))
                                     ; otherwise print and go again
-                                    (do (println "2Read" v "from" ch)
-                                        (recur 1))))))
-                  3))))
+                      (do (println "2" n "Read" v "from" (nameof ch))
+                          (sp/take! (sp/timeout-chan 1000))
+                          (recur (inc n)))))))
+
+
+          4))
+      3)))
 
 (defn el-nothing []
   ; el-make-chan !?
@@ -63,11 +87,11 @@
   (let [c1 (sp/chan)
         c2 (sp/chan)]
     (sp/go-loop []
-                (let [[v ch] (sp/alts! [c1 c2])]
-                  (when v
-                    (println "Read" v "from" ch)
+      (let [[v ch] (sp/alts! [c1 c2])]
+        (when v
+          (println "Read" v "from" ch)
                     ;(sp/recur )
-                    )))
+          )))
 
     (sp/>! c1 "hi")
     (sp/>! c2 "there")
@@ -92,8 +116,8 @@
     ;; Add pending put operation to all channels
     (doseq [c cs] (sp/put! c "hi"))
 
-    (dotimes [i n]
-      (let [[v c] (sp/alts! cs)]
+    (dotimes [_ n]
+      (let [[v _c] (sp/alts! cs)]
         (assert (= "hi" v))))
 
     ;; Close all channels

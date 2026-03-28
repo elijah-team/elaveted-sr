@@ -1,6 +1,7 @@
 (ns evaleted-lein.core-test
   (:require [clojure.test :refer :all]
-            [evaleted-lein.core :refer :all])
+            [evaleted-lein.core :refer :all]
+            [tripleo.el-entry-point :as tep])
   (:use [clojure.pprint :refer pp])
   (:import (java.util ArrayList)
            (tripleo.elijah Main)
@@ -37,5 +38,16 @@
 
 (deftest d-test
   (testing "FIXME, 4"
+    (is (= 1 1)
+        (= "non-existent" (CljExampleMain/callClojure2)))))
+
+(deftest e-test
+  (testing "can't figure out the repl"
+    (do
+      (let [ch1 (tep/el-make-chan)]
+        (tep/el-run-loop [ch1]))
+      ;(tep/start)
+      
+      )
     (is (= 1 1)
         (= "non-existent" (CljExampleMain/callClojure2)))))
