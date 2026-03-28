@@ -31,8 +31,13 @@ import tripleo.elijah_durable_elevated.stages.deduce.FoundElement;
 import tripleo.elijah_durable_elevated.stages.gen_fn.BaseEvaFunction;
 import tripleo.elijah_durable_elevated.stages.gen_fn.GenType;
 import tripleo.elijah_durable_elevated.stages.instructions.IdentIA;
+import tripleo.elijah_elevated_durable.names_impl.*;
 
 public interface IDeduceElement3 {
+	default EN_NameUsage.EN_NameUsageTarget asEN_NameUsageTarget() {
+		return null;
+	}
+
 	enum DeduceElement3_Kind {
 		CLASS, FUNCTION, GEN_FN__CTE, GEN_FN__GC_VTE, GEN_FN__ITE, GEN_FN__PTE,
 		// ...,

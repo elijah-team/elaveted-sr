@@ -285,7 +285,10 @@ public class DeduceTypes2Injector {
 	}
 
 	public EN_Usage new_EN_NameUsage(final EN_Name aName, final DeduceElement3_IdentTableEntry aDe3Ite) {
-		return new EN_NameUsage(aName, aDe3Ite);
+		return new_EN_NameUsage(aName, aDe3Ite.asEN_NameUsageTarget());
+	}
+	public EN_Usage new_EN_NameUsage(final EN_Name aName, final EN_NameUsage.EN_NameUsageTarget aNameUsageTarget) {
+		return new EN_NameUsage(aName, aNameUsageTarget);
 	}
 
 	public EN_Understanding new_ENU_AliasedFrom(final AliasStatement aOrigE) {

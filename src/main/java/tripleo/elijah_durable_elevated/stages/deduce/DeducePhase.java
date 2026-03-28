@@ -37,6 +37,7 @@ import tripleo.elijah_durable_elevated.stages.post_deduce.*;
 import tripleo.elijah_durable_elevated.work.*;
 import tripleo.elijah_elevated_durable.backbone.*;
 import tripleo.elijah_elevated_durable.comp.*;
+import tripleo.elijah_elevated_durable.lang_model.*;
 import tripleo.elijah_fluffy.diagnostic.*;
 import tripleo.elijah_fluffy.util.*;
 
@@ -190,8 +191,11 @@ public class DeducePhase extends _RegistrationTarget implements ReactiveDimensio
 		return deduceModule(aMod, this.generatedClasses, EDL_Compilation.gitlabCIVerbosity());
 	}
 
-	public @NotNull DeduceTypes2 deduceModule(@NotNull WorldModule wm, @NotNull Iterable<EvaNode> lgf,
+	public @NotNull DeduceTypes2 deduceModule(@NotNull WorldModule wm,
+											  @NotNull Iterable<EvaNode> lgf,
 											  EDL_ElLog.Verbosity verbosity) {
+		wm.addUnderstanding(new EN_Understanding(){});
+
 		var mod = wm.module();
 
 		final @NotNull DeduceTypes2 deduceTypes2 = _inj().new_DeduceTypes2(mod, this, verbosity);

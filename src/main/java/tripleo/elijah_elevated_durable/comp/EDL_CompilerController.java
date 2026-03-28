@@ -14,15 +14,46 @@ import tripleo.elijah_prolific.v.*;
 import tripleo.graph.*;
 
 import java.util.*;
+import java.util.function.*;
 
 public class EDL_CompilerController implements CompilerController {
-	private final ICompilationAccess3    ca3;
-
-	private final List<EventualRegister> allRegisters = new ArrayList<>();
-	ICompilationBus     cb;
-	List<CompilerInput> inputs;
+	private final Eventual<IPersistentMap> configP        = new Eventual<>();
+	private final List<EventualRegister>   allRegisters   = new ArrayList<>();
+	private final ICompilationAccess3      ca3;
+	private       ICompilationBus          cb;
+	private       List<CompilerInput>      inputs;
 	private       EDL_ICompilation         c;
-	private final Eventual<IPersistentMap> configP =new Eventual<>();
+	private final CK_Markers               processMarkers =
+			// fixme (groovy,vavr,kotlin, *clj!!*): LazyKt.lazy();
+			(new Supplier<CK_Markers>() {
+				@Override
+				public CK_Markers get() {
+					final CK_Markers res = new CK_Markers() {
+						@Override
+						public void add(final CK_Marker aCKMarker) {
+							revised().addMarker(aCKMarker);
+						}
+
+						@Override
+						public int size() {
+							return revised().markerCount();
+						}
+					};
+					res.add(new CK_Marker(){
+						@Override
+						public String getPath() {
+							return "/compiler-controller/"+(res.size());
+						}
+
+						@Override
+						public CK_MarkerType getMarkerType() {
+							return CK_MarkerType.PROCESS;
+						}
+
+					});
+					return res;
+				}
+			}).get();
 
 	public EDL_CompilerController(final ICompilationAccess3 aCa3) {
 		ca3 = aCa3;
@@ -41,7 +72,7 @@ public class EDL_CompilerController implements CompilerController {
 
 	@Override
 	public void printUsage() {
-		tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_out_2("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
+		SimplePrintLoggerToRemoveSoon.println_out_2("Usage: eljc [--showtree] [-sE|O] <directory or .ez file names>");
 	}
 
 	@Override
@@ -78,8 +109,8 @@ public class EDL_CompilerController implements CompilerController {
 		final ICompilationAccess compilationAccess = ce.getCompilationAccess();
 		assert compilationAccess != null;
 
-		final ICompilationRunner icr = con.newCompilationRunner(compilationAccess);
-		final EDL_CompilationRunner  cr  = (EDL_CompilationRunner) icr;
+		final ICompilationRunner    icr = con.newCompilationRunner(compilationAccess);
+		final EDL_CompilationRunner cr  = (EDL_CompilationRunner) icr;
 
 		ce.setCompilationRunner(cr);
 
@@ -110,7 +141,7 @@ public class EDL_CompilerController implements CompilerController {
 	public static class _DefaultCon implements Con {
 		@Override
 		public EDL_CompilationRunner newCompilationRunner(final ICompilationAccess compilationAccess) {
-			final CR_State          crState = new CR_State(compilationAccess);
+			final CR_State              crState = new CR_State(compilationAccess);
 			final EDL_CompilationRunner cr      = new EDL_CompilationRunner(compilationAccess, crState);
 
 			crState.setRunner(cr);

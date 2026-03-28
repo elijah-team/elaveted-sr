@@ -11,7 +11,7 @@ public class MainTest {
 	public void main1() throws Exception {
 		var x= CljExampleMain.callClojure("ns", "fn");
 		//assertThat(x).isNotNull();
-		assert x!=null;
+		Assert.assertNotNull(x);
 	}
 
 	@Test

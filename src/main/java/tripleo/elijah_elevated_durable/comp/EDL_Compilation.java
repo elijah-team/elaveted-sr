@@ -9,8 +9,9 @@
 package tripleo.elijah_elevated_durable.comp;
 
 import clojure.lang.*;
-import com.google.common.base.Preconditions;
+import com.google.common.base.*;
 import com.google.common.collect.*;
+import io.reactivex.rxjava3.core.*;
 import io.reactivex.rxjava3.core.Observer;
 import org.apache.commons.lang3.tuple.*;
 import org.jdeferred2.*;
@@ -28,6 +29,7 @@ import tripleo.elijah.lang.i.*;
 import tripleo.elijah.nextgen.inputtree.*;
 import tripleo.elijah.nextgen.outputstatement.*;
 import tripleo.elijah.nextgen.outputtree.*;
+import tripleo.elijah.nextgen.query.*;
 import tripleo.elijah.stages.logging.*;
 import tripleo.elijah.world.i.*;
 import tripleo.elijah_durable_elevated.*;
@@ -43,16 +45,19 @@ import tripleo.elijah_durable_elevated.stages.deduce.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.i.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.impl.*;
 import tripleo.elijah_durable_elevated.stages.logging.*;
+import tripleo.elijah_durable_elevated.world.i.*;
 import tripleo.elijah_durable_elevated.world.i.LivingRepo;
 import tripleo.elijah_elevated_durable.backbone.*;
 import tripleo.elijah_elevated_durable.comp.input.*;
 import tripleo.elijah_elevated_durable.lang_model.*;
+import tripleo.elijah_fluffy.anno.*;
 import tripleo.elijah_fluffy.util.*;
 import tripleo.graph.*;
 import tripleo.paths.*;
+import tripleo.small.*;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.Optional;
 import java.util.stream.*;
 
 public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
@@ -93,8 +98,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	private                ICompilationAccess3                                            compilationAccess3;
 	private                CPX_Signals                                                    cpxSignals;
 	private                CompilationInterfaceRevised2                                   revised2;
-	private                EDL_LangModel langModel;
-	private Eventual<EDL_Compilation>    postEv = new Eventual<>();
+	private                EDL_LangModel                                                  langModel;
+	private                Eventual<EDL_Compilation>                                      postEv                = new Eventual<>();
+	private @ElLateInit    CompilationInterfaceRevised                                    _revised;
 
 	public EDL_Compilation(final @NotNull ErrSink aErrSink, final IO aIo) {
 		errSink            = aErrSink;
@@ -122,7 +128,20 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		_ciws       = new ArrayList<>();
 		_ci_models  = new HashMap<>();
 		_ciw_buffer = new ArrayList<>();
+
+
+		postEv.then(new DoneCallback<EDL_Compilation>() {
+			@Override
+			public void onDone(final EDL_Compilation result) {
+				qd = new QueryDatabase() {
+				};
+			}
+		});
 	}
+
+	private @ElLateInit
+	@Nullable QueryDatabase qd;
+
 
 	@Override
 	public @NotNull CompilationClosure getCompilationClosure() {
@@ -167,7 +186,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public String getProjectName() {
 		return getRootCI().getName();
-	}	@Override
+	}
+
+	@Override
 	public int errorCount() {
 		return errSink.errorCount();
 	}
@@ -238,7 +259,9 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 		};
 		return this.revised2;
-	}	public ICompilationAccess3 getCompilationAccess3() {
+	}
+
+	public ICompilationAccess3 getCompilationAccess3() {
 		var _c = this;
 		if (compilationAccess3 == null) {
 			compilationAccess3 = new ICompilationAccess3() {
@@ -571,6 +594,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 	@Override
 	public Operation2<GWorldModule> findPrelude(final String prelude_name) {
+		assert qd != null;
 		final Operation2<OS_Module> prelude = use.findPrelude(prelude_name);
 
 		if (prelude.mode() == Mode.SUCCESS) {
@@ -639,6 +663,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 			pushItem(compilerInstructions);
 		}
 
+		assert qd != null;
 		use.use(compilerInstructions);
 		//cci_listener.id.add(rootCI);
 	}
@@ -666,6 +691,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 	@Override
 	public ElijahCache use_elijahCache() {
+		assert qd != null;
 		return use.getElijahCache();
 	}
 
@@ -691,6 +717,8 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 
 	/**
+	 * Update (disregard below): The new on @Once's the result
+	 * --
 	 * Always return a new result, not connected with the previous ones
 	 * Highly functional
 	 * (Presently) incorrect
@@ -698,85 +726,139 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public CompilationInterfaceRevised revised() {
 		final EDL_Compilation _compilation = this;
-		return new CompilationInterfaceRevised() {
-			private final Properties /*Map<String, Object>*/ markersForPath = new Properties(); // FIXME simplify w/ typesafe config??
-			private final List<CK_Marker>                    otherMarkers   = new ArrayList<>();
+		if (this._revised == null) {
+			this._revised = new CompilationInterfaceRevised() {
+				private final Properties /*Map<String, Object>*/ markersForPath = new Properties(); // FIXME simplify w/ typesafe config??
+				private final List<CK_Marker>                    otherMarkers   = new ArrayList<>();
 
-			/**
-			 * WARNING: Will replace previous @ aPath
-			 */
-			@Override
-			public CK_Marker addMarker(String aPath, CK_Marker.CK_MarkerType aMarkerType, Object aValue) {
-				final CK_Marker marker = new CK_Marker() {
-				};
-				markersForPath.put(aPath, aValue);
-				return marker;
-			}
+				/**
+				 * WARNING: Will replace previous @ aPath
+				 */
+				@Override
+				public CK_Marker addMarker(String aPath, CK_Marker.CK_MarkerType aMarkerType, Object aValue) {
+					final CK_Marker marker = new CK_SimplisticMarker(aPath, aMarkerType, aValue);
+					assert !markersForPath.containsKey(aPath); // fixme
+					markersForPath.put(aPath, aValue);
+					// fixme also otherMarkers is slightly not advised
+					return marker;
+				}
 
-			@Override
-			public CirResult compile(final List<CompilerInput> lci) {
-				final CompOutput a = new CompOutput() {
-					@Override
-					public int countMarkers() {
-						return markersForPath.size() + otherMarkers.size();
+				@Override
+				public void addMarker(final CK_Marker aCKMarker) {
+					if (aCKMarker instanceof CK_SimplisticMarker sm) {
+						addMarker(sm.getPath(), sm.getMarkerType(), sm.getValue());
+					} else {
+						otherMarkers.add(aCKMarker);
 					}
+				}
 
-					@Override
-					public CK_Marker getMarker(final int index) {
-						return otherMarkers.get(index);
-					}
+				@Override
+				public CirResult compile(final List<CompilerInput> lci) {
+					final CompOutput a = new CompOutput() {
+						@Override
+						public int countMarkers() {
+							return markersForPath.size() + otherMarkers.size();
+						}
 
-					@Override
-					public CK_Marker getMarker(final String aPath) {
-						final Object o = markersForPath.get(aPath);
-						return (CK_Marker) o;
-					}
+						@Override
+						public CK_Marker getMarker(final int index) {
+							return otherMarkers.get(index);
+						}
 
-					@Override
-					public List<CK_Marker> listMarkers() {
-						return ImmutableList.copyOf(otherMarkers);
-					}
+						@Override
+						public CK_Marker getMarker(final String aPath) {
+							final Object o = markersForPath.get(aPath);
+							return (CK_Marker) o;
+						}
 
-					@Override
-					public Cursor<CK_Log> perFile(final CE_Path p) {
-						return null;
-					}
+						@Override
+						public List<CK_Marker> listMarkers() {
+							return ImmutableList.copyOf(otherMarkers);
+						}
 
-					@Override
-					public void writeToPath(final CE_Path p, final EG_Statement stmt) {
-						int y = 2;
-					}
-				};
-				final CompInteractive b = new CompInteractive() {
-				};
-				return new CirResult() {
-					@Override
-					public CompOutput getOutput() {
-						return a;
-					}
+						@Override
+						public Cursor<CK_Log> perFile(final CE_Path p) {
+							return null;
+						}
 
-					@Override
-					public CompInteractive getInteractive() {
-						return b;
-					}
+						@Override
+						public void writeToPath(final CE_Path p, final EG_Statement stmt) {
+							int y = 2;
+						}
 
-					@Override
-					public CK_Marker getMarker(final String aPath) {
-						return a.getMarker(aPath);
-					}
+						@Override
+						public Eventual<CompSnapshot> getSnapshot(final ES_Symbol aSnapshotSymbol) {
+							NotImplementedException.raise_stop();
+							return Eventual.never(); // fixme remove this
+						}
+					};
+					final CompInteractive b = new CompInteractive() {
+						@Override
+						public void addInput(final CompilerInput aCompilerInput) {
+							NotImplementedException.raise_stop();
+						}
 
-					@Override
-					public int markerCount() {
-						return a.countMarkers();
-					}
+						@Override
+						public void fixMarker(final CK_Marker aMarker, final int fixIndex) {
+							NotImplementedException.raise_stop();
+						}
 
-					@Override
-					public int errorCount() {
-						return _compilation.errorCount();
-					}
-				};
-			}
-		};
+						@Override
+						public String snapshot() {
+							NotImplementedException.raise_stop();
+							return "";
+						}
+					};
+					return new CirResult() {
+						{
+							final Eventual<CompilerController> controllerEventual = _compilation._p_CompilerController;
+							controllerEventual.then(new DoneCallback<CompilerController>() {
+								@Override
+								public void onDone(final CompilerController aCompilerController) {
+									_compilation.feedInputs(lci, aCompilerController);
+									//_compilation.feedInputsCon(null/*,null*/);
+									//_compilation.feedInputsCon2(null/*,null*/);
+								}
+							});
+							// technically should fail
+							assert controllerEventual.isResolved();
+						}
+
+						@Override
+						public CompOutput getOutput() {
+							return a;
+						}
+
+						@Override
+						public CompInteractive getInteractive() {
+							return b;
+						}
+
+						@Override
+						public CK_Marker getMarker(final String aPath) {
+							return a.getMarker(aPath);
+						}
+
+						@Override
+						public int markerCount() {
+							return a.countMarkers();
+						}
+
+						@Override
+						public int errorCount() {
+							return _compilation.errorCount();
+						}
+					};
+				}
+
+				@Override
+				public int markerCount() {
+					///  which tool does this?
+					return revised().markerCount();
+				}
+			};
+		}
+		return this._revised;
 	}
 
 	//@Override
@@ -835,8 +917,8 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 	@Override
 	public void spi(final Object object) {
-		if (object instanceof EDL_SPI_Compilation spic) {
-			spic.accept(EDL_SPI_CompilationT.of(EDL_Compilation.this));
+		if (object instanceof EDL_SPI_Compilation spiComp) {
+			spiComp.accept(EDL_SPI_CompilationT.of(EDL_Compilation.this));
 		}
 		if (object instanceof PipelinePlugin pp) {
 			assert compilationEnclosure != null;
@@ -911,5 +993,32 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public void post(final OnCompilation aPostable) {
 		postEv.then(aPostable::onCompilation);
+	}
+
+	private static class CK_SimplisticMarker implements CK_Marker {
+		private final String        path;
+		private final CK_MarkerType markerType;
+		private final Object        value;
+
+		public CK_SimplisticMarker(final String aPath, final CK_MarkerType aMarkerType, final Object aValue) {
+			path       = aPath;
+			markerType = aMarkerType;
+			value      = aValue;
+		}
+
+		@Override
+		public String getPath() {
+			return path;
+		}
+
+		@Override
+		public CK_MarkerType getMarkerType() {
+			return markerType;
+		}
+
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 }

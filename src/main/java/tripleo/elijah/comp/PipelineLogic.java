@@ -43,6 +43,7 @@ public interface PipelineLogic extends EventualRegister, GPipelineLogic {
 
 	public interface GDM_Product {
 		static GDM_Product of(Object aGDPModuleCompletableProcess) {
+			/// this might be familiar
 			return new GDM_Product() {
 				@Override
 				public List<EvaNode> getNodes() {
@@ -69,6 +70,8 @@ public interface PipelineLogic extends EventualRegister, GPipelineLogic {
 		OS_Module getSource();
 
 		// TODO 24/01/22  need EvaModule?
+
+		Eventual<EvaModule> getEvaModule();
 
 		//promise??
 		List<EvaNode> getGeneratedProducts();

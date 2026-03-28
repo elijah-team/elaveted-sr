@@ -3,7 +3,7 @@ package tripleo.elijah;
 import clojure.lang.*;
 import org.jdeferred2.*;
 import org.jetbrains.annotations.*;
-import tripleo.elijah.comp.i.CompilerController;
+import tripleo.elijah.comp.i.*;
 import tripleo.elijah_fluffy.util.*;
 
 import java.util.*;
@@ -73,14 +73,14 @@ public class Main {
 			return (this.triggerOk = true);
 		}
 
-		private static void _onCompilerController(final @NotNull CompilerController value,
+		private static void _onCompilerController(final @NotNull CompilerController aController,
 												  final IPersistentMap aConfig) {
-			value.setConfig(aConfig);
+			aController.setConfig(aConfig);
 			final String key  = "CompilerController";
 			final Object ccs0 = aConfig.valAt(key, null);
 			if (ccs0 != null) {
 				final IFn ccs = (IFn) ccs0;
-				ccs.invoke(value);
+				ccs.invoke(aController);
 			}
 		}
 	}

@@ -13,6 +13,7 @@ public interface ICompilationAccess3 {
 
 	void addLog(ElLog aLog);
 
+	// TODO why the flag? it looks stupid.
 	void writeLogs(boolean aSilent);
 
 	PipelineLogic getPipelineLogic();

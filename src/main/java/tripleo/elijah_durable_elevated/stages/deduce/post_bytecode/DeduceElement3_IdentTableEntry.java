@@ -16,6 +16,8 @@ import tripleo.elijah_durable_elevated.stages.deduce.post_bytecode.DED.*;
 import tripleo.elijah_durable_elevated.stages.gen_fn.*;
 import tripleo.elijah_durable_elevated.stages.instructions.*;
 import tripleo.elijah_elevated_durable.comp.*;
+import tripleo.elijah_elevated_durable.lang_model.*;
+import tripleo.elijah_elevated_durable.names_impl.*;
 import tripleo.elijah_fluffy.util.*;
 
 import java.util.*;
@@ -194,6 +196,21 @@ public class DeduceElement3_IdentTableEntry extends DefaultStateful implements I
 				}
 			});
 		}
+	}
+
+	@Override
+	public EN_NameUsage.EN_NameUsageTarget asEN_NameUsageTarget() {
+		return new EN_NameUsage.EN_NameUsageTarget() {
+			@Override
+			public void record(final EN_Usage usage) {
+				NotImplementedException.raise_stop();
+			}
+
+			@Override
+			public boolean isRecorded(final EN_Usage usage) {
+				NotImplementedException.raise_stop();		return false;
+			}
+		};
 	}
 
 	@Override

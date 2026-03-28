@@ -1,13 +1,15 @@
 package tripleo.graph;
 
-import org.apache.commons.lang3.tuple.Pair;
-import tripleo.elijah.comp.CompilerInput;
+import tripleo.elijah.comp.*;
 
-import java.util.List;
+import java.util.*;
 
 public interface CompilationInterfaceRevised {
 
 	CK_Marker addMarker(String aPath, CK_Marker.CK_MarkerType aMarkerType, Object aValue);
+
+	void addMarker(CK_Marker aCKMarker);
+
 
 	CirResult compile(List<CompilerInput> lci);
 
@@ -15,6 +17,9 @@ public interface CompilationInterfaceRevised {
 		throw new RuntimeException("too complicated.");
 	}
 
+	int markerCount();
+
+	/// is this immutable (there is getSnapshot somewhere)
 	public interface CirResult {
 		CompOutput getOutput();
 

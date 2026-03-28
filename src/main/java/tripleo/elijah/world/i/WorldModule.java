@@ -6,6 +6,7 @@ import tripleo.elijah.g.*;
 import tripleo.elijah.lang.i.*;
 import tripleo.elijah_elevated_durable.comp_notation.*;
 import tripleo.elijah_durable_elevated.stages.gen_c.*;
+import tripleo.elijah_elevated_durable.lang_model.*;
 import tripleo.elijah_fluffy.util.*;
 
 public interface WorldModule extends GWorldModule {
@@ -16,4 +17,8 @@ public interface WorldModule extends GWorldModule {
 	OS_Module module();
 
 	DeferredObject<GenerateC, Void, Void> generateCDeferred();
+
+	/// Not sure if this makes sense
+	///  at all or on OS_Module (maybe (def NOT) EIT_Input)
+	void addUnderstanding(EN_Understanding aENUnderstanding);
 }

@@ -1,8 +1,10 @@
 package tripleo.graph;
 
-import tripleo.elijah.nextgen.outputstatement.EG_Statement;
+import tripleo.elijah.nextgen.outputstatement.*;
+import tripleo.elijah_fluffy.util.*;
+import tripleo.small.*;
 
-import java.util.List;
+import java.util.*;
 
 public interface CompOutput {
 	int countMarkers();
@@ -19,4 +21,13 @@ public interface CompOutput {
 
 	// outputTree
 	void writeToPath(CE_Path p, EG_Statement stmt);
+
+	Eventual<CompSnapshot> getSnapshot(ES_Symbol aSnapshotSymbol);
+
+	record CompSnapshot(
+			List<CK_Marker> markers,
+			List<CK_Log> logs,
+			List<CK_Fragment> fragments
+	) {
+	}
 }

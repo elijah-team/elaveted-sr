@@ -34,9 +34,9 @@ public class NonOpinionatedBuilder {
 		return input;
 	}
 
-	public EDL_CompilerController createCompilerController(final EDL_ICompilation aC) {
-		final EDL_Compilation c = (EDL_Compilation) aC;
-		return new EDL_CompilerController(c.getCompilationAccess3());
+	public EDL_CompilerController createCompilerController(final EDL_ICompilation aCompilation) {
+		final EDL_Compilation compilation = (EDL_Compilation) aCompilation;
+		return new EDL_CompilerController(compilation.getCompilationAccess3());
 	}
 
 	public WorkList createWorkList(final Object contextAkaOpinion) {
