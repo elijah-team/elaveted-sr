@@ -5,7 +5,6 @@ import org.jdeferred2.impl.*;
 import org.jetbrains.annotations.*;
 import tripleo.elijah_fluffy.diagnostic.*;
 
-@SuppressWarnings("LombokGetterMayBeUsed")
 public class Eventual<P> {
 	private final String                              mDescription;
 	private final DeferredObject<P, Diagnostic, Void> prom = new DeferredObject<>();
@@ -85,6 +84,7 @@ public class Eventual<P> {
 		return new Eventual<>(new NeverEventualBehavior<>());
 	}
 
+	@SuppressWarnings("unused")
 	public static <T> Eventual<T> resettable() {
 		return new Eventual<>(new ResettableEventualBehavior<>());
 	}
@@ -110,20 +110,10 @@ public class Eventual<P> {
 			prom.then(cb);
 		}
 
-		//@Override
-		//public void register(final @NotNull EventualRegister er) {
-		//	er.register(Eventual.this);
-		//}
-
 		@Override
 		public boolean isResolved() {
 			return prom.isResolved();
 		}
-
-		//@Override
-		//public String description() {
-		//	return mDescription;
-		//}
 
 		@Override
 		public boolean isFailed() {
@@ -174,20 +164,10 @@ public class Eventual<P> {
 			prom.then(cb);
 		}
 
-		//@Override
-		//public void register(final @NotNull EventualRegister er) {
-		//	er.register(Eventual.this);
-		//}
-
 		@Override
 		public boolean isResolved() {
 			return prom.isResolved();
 		}
-
-		//@Override
-		//public String description() {
-		//	return mDescription;
-		//}
 
 		@Override
 		public boolean isFailed() {
@@ -283,8 +263,9 @@ public class Eventual<P> {
 			throw new IllegalStateException();
 		}
 
-		public Diagnostic getD() {
-			return d;
+		@SuppressWarnings({"unused", "SuspiciousGetterSetter"})
+		public Diagnostic getDiagnostic() {
+			return this.d;
 		}
 	}
 
@@ -360,20 +341,10 @@ public class Eventual<P> {
 			prom.then(cb);
 		}
 
-		//@Override
-		//public void register(final @NotNull EventualRegister er) {
-		//	er.register(Eventual.this);
-		//}
-
 		@Override
 		public boolean isResolved() {
 			return prom.isResolved();
 		}
-
-		//@Override
-		//public String description() {
-		//	return mDescription;
-		//}
 
 		@Override
 		public boolean isFailed() {

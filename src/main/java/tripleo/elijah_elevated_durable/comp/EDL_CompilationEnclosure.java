@@ -58,9 +58,9 @@ public class EDL_CompilationEnclosure
 	private                ICompilationAccess                                               ca;
 	private                ICompilationBus                                                  compilationBus;
 	private                EDL_CompilationRunner                                            compilationRunner;
-	private                CompilerDriver                                                   compilerDriver;
-	private List<CompilerInput> inp;
-	private EDL_IPipelineAccess pa;
+	private                CompilerDriver compilerDriver;
+	private List<CompilerInput>           compilerInput;
+	private EDL_IPipelineAccess           pipelineAccess;
 	private EDL_PipelineLogic   pipelineLogic;
 
 	public EDL_CompilationEnclosure(final EDL_ICompilation aCompilation) {
@@ -109,7 +109,7 @@ public class EDL_CompilationEnclosure
 */
 		pa._setAccessBus(ab);
 
-		this.pa = pa;
+		this.pipelineAccess = pa;
 	}
 
 	//	@Override
@@ -299,14 +299,13 @@ public class EDL_CompilationEnclosure
 	@Contract(pure = true)
 	@Override
 	public List<CompilerInput> getCompilerInput() {
-		return inp;
+		return compilerInput;
 	}
 
 	@Override
 	public void setCompilerInput(final List<CompilerInput> aInputs) {
-		//assert inp == null;
-
-		inp = aInputs;
+		assert compilerInput == null;
+		compilerInput = aInputs;
 	}
 
 	@Override
@@ -320,7 +319,7 @@ public class EDL_CompilationEnclosure
 	@Contract(pure = true)
 	@Override
 	public EDL_IPipelineAccess getPipelineAccess() {
-		return pa;
+		return pipelineAccess;
 	}
 
 	@Contract(pure = true)
@@ -441,12 +440,12 @@ public class EDL_CompilationEnclosure
 	@Override
 	public void writeLogs() {
 		final ICompilationAccess   compilationAccess    = this.getCompilationAccess();
-		final CompilationEnclosure compilationEnclosure = pa.getCompilationEnclosure();
+		final CompilationEnclosure compilationEnclosure = pipelineAccess.getCompilationEnclosure();
 		final List<ElLog>          logs                 = compilationEnclosure.getLogs();
 
 		final GN_WriteLogs notable = new GN_WriteLogs(compilationAccess, logs);
 
-		pa.notate(Provenance.DefaultCompilationAccess__writeLogs, notable);
+		pipelineAccess.notate(Provenance.DefaultCompilationAccess__writeLogs, notable);
 	}
 
 	@Override

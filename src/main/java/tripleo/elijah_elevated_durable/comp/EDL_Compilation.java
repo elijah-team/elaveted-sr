@@ -209,10 +209,11 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 	@Override
 	public void feedCmdLine(final @NotNull List<String> args) {
-		final CompilerController controller = new EDL_CompilerController(this.getCompilationAccess3());
+		final NonOpinionatedBuilder nob                = new NonOpinionatedBuilder();
+		final ICompilationAccess3   compilationAccess4 = getCompilationAccess3();
+		final CompilerController    controller         = nob.createCompilerController(compilationAccess4);
 		ccP.resolve(controller);
-		final NonOpinionatedBuilder nob    = new NonOpinionatedBuilder();
-		final List<CompilerInput>   inputs = nob.inputs(args);
+		final List<CompilerInput> inputs = nob.inputs(args);
 		feedInputs(inputs, controller);
 	}
 
@@ -648,16 +649,30 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 
 	/**
 	 * Convenience function
-	 *
-	 * @return
 	 */
 	@Override
 	public CompilerController feedInputsCon(final List<String> aStringList) {
-		final NonOpinionatedBuilder nob = new NonOpinionatedBuilder();
 		// contrast with defaultCompilerController
-		final CompilerController controller = nob.createCompilerController(this);
+		final NonOpinionatedBuilder nob                 = new NonOpinionatedBuilder();
+		final ICompilationAccess3   iCompilationAccess3 = getCompilationAccess3();
+		final CompilerController    controller          = nob.createCompilerController(iCompilationAccess3);
 		ccP.resolve(controller);
-		this.feedInputs(nob.inputs(aStringList), controller);
+		final CompilationInterfaceRevised revised = revised();
+		assert revised != null;
+		final int state = revised.getState();
+		assert state == 0;
+
+		final EDL_Compilation _c = this;
+		revised.advise(new RevisedAdvisable() {
+			@Override
+			public void reverse(final CompilationInterfaceRevised aCompilationInterfaceRevised, final Compilation c) {
+				assert _c == c;
+				_c.feedInputs(nob.inputs(aStringList), controller);
+			}
+		});
+		final int state2 = revised.getState();
+		//noinspection ExcessiveRangeCheck,ConditionCoveredByFurtherCondition
+		assert state2 == 1 || state2 != 0;
 		return controller;
 	}
 
@@ -732,8 +747,14 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		final EDL_Compilation _compilation = this;
 		if (this._revised == null) {
 			this._revised = new CompilationInterfaceRevised() {
+				private       int                                state          = 0;
 				private final Properties /*Map<String, Object>*/ markersForPath = new Properties(); // FIXME simplify w/ typesafe config??
 				private final List<CK_Marker>                    otherMarkers   = new ArrayList<>();
+
+				@Override
+				public int getState() {
+					return state;
+				}
 
 				/**
 				 * WARNING: Will replace previous @ aPath
@@ -860,6 +881,15 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 				public int markerCount() {
 					///  which tool does this?
 					return revised().markerCount();
+				}
+
+				@Override
+				public void advise(final RevisedAdvisable aRevisedAdvisable) {
+					aRevisedAdvisable.reverse(this, _compilation);
+					final String name = aRevisedAdvisable.getClass().getName();
+					assert "null".equals(name);
+					assert null == name;
+
 				}
 			};
 		}

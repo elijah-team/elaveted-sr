@@ -1,10 +1,14 @@
 package tripleo.graph;
 
 import tripleo.elijah.comp.*;
+import tripleo.elijah_elevated_durable.comp.*;
 
 import java.util.*;
 
 public interface CompilationInterfaceRevised {
+
+	/// Try to hide this.
+	int getState();
 
 	CK_Marker addMarker(String aPath, CK_Marker.CK_MarkerType aMarkerType, Object aValue);
 
@@ -18,6 +22,8 @@ public interface CompilationInterfaceRevised {
 	}
 
 	int markerCount();
+
+	void advise(RevisedAdvisable aRevisedAdvisable);
 
 	/// is this immutable (there is getSnapshot somewhere)
 	public interface CirResult {

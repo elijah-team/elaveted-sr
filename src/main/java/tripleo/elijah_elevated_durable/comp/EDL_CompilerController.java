@@ -41,12 +41,27 @@ public class EDL_CompilerController implements CompilerController {
 				final CK_Markers res = new CK_Markers() {
 					@Override
 					public void add(final CK_Marker aCKMarker) {
-						revised().addMarker(aCKMarker);
+						final CompilationInterfaceRevised revised = revised();
+						if (revised == null) {
+							cP.then(Sc -> {
+								Sc.revised().addMarker(aCKMarker);
+							});
+						} else {
+							revised.addMarker(aCKMarker);
+						}
 					}
 
 					@Override
 					public int size() {
-						return revised().markerCount();
+						final CompilationInterfaceRevised revised = revised();
+						if (revised == null) {
+							cP.then(Sc -> {
+								Sc.revised().markerCount();
+							});
+							return -1;
+						} else {
+							return revised().markerCount();
+						}
 					}
 				};
 				final String s = "/compiler-controller/0";// + (res.size());
@@ -67,12 +82,14 @@ public class EDL_CompilerController implements CompilerController {
 				return res;
 			}
 		}).get();
-		NotImplementedException.raise_stop();
+		//NotImplementedException.raise_stop();
 	}
 
 	public void _setInputs(final Compilation aCompilation, final List<CompilerInput> aInputs) {
-		cP.resolve((EDL_ICompilation) aCompilation);
-		cP.then(Sc -> c = Sc);
+		if (null != aCompilation) {
+			cP.resolve((EDL_ICompilation) aCompilation);
+			cP.then(Sc -> c = Sc);
+		}
 		inputs = aInputs;
 	}
 
@@ -108,7 +125,8 @@ public class EDL_CompilerController implements CompilerController {
 
 				this.xx = op.process(c, inputs, cb); // TODO 09/08 Make this more complicated
 			}
-		};
+		}
+		;
 		final DoneCallback2 cb1 = new DoneCallback2();
 		cP.then(cb1);
 		return cb1.xx;

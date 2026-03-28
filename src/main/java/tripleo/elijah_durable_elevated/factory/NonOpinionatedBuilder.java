@@ -1,16 +1,14 @@
 package tripleo.elijah_durable_elevated.factory;
 
-import org.jetbrains.annotations.NotNull;
-import tripleo.elijah.comp.CompilerInput;
+import org.jetbrains.annotations.*;
+import tripleo.elijah.comp.*;
+import tripleo.elijah_durable_elevated.comp.*;
 import tripleo.elijah_durable_elevated.work.*;
-import tripleo.elijah_elevated_durable.comp.EDL_ICompilation;
-import tripleo.elijah_durable_elevated.work.EDP_WorkList;
-import tripleo.elijah_elevated_durable.comp.input.EDL_CompilerInput;
-import tripleo.elijah_elevated_durable.comp.EDL_Compilation;
-import tripleo.elijah_elevated_durable.comp.EDL_CompilerController;
+import tripleo.elijah_elevated_durable.comp.*;
+import tripleo.elijah_elevated_durable.comp.input.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 public class NonOpinionatedBuilder {
 	public NonOpinionatedBuilder() {}
@@ -34,9 +32,8 @@ public class NonOpinionatedBuilder {
 		return input;
 	}
 
-	public EDL_CompilerController createCompilerController(final EDL_ICompilation aCompilation) {
-		final EDL_Compilation compilation = (EDL_Compilation) aCompilation;
-		return new EDL_CompilerController(compilation.getCompilationAccess3());
+	public EDL_CompilerController createCompilerController(final ICompilationAccess3 aCompilationAccess3) {
+		return new EDL_CompilerController(aCompilationAccess3);
 	}
 
 	public WorkList createWorkList(final Object contextAkaOpinion) {
