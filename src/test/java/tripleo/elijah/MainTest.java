@@ -15,6 +15,12 @@ public class MainTest {
 	}
 
 	@Test
+	public void ctestalike() throws Exception {
+		var x = CljExampleMain.callClojure("evaleted-lein.core-test", "hello");
+		Assert.assertEquals("non-existent", x);
+	}
+
+	@Test
 	public void main3() {
 		final String             b_test = "test/demo-el-normal/main2";
 		final var                pl     = new PersistentList(b_test);
