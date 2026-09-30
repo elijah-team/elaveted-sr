@@ -22,6 +22,9 @@ Guessing that the intent was to use `lein test` (and *maybe* `lein pom`)
 - [ ] part of the original motivation of clojure was to get more concision
 - [ ] we need a static server
 - [ ] we need a dynamic server
+- [ ] Uni stuff might be a good fit here
+- [ ] Figure out instrumental
+- [ ] something about sdlc/c../sda whatever 
 - [ ] ...
 
 
