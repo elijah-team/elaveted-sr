@@ -60,8 +60,7 @@
    [org.slf4j/slf4j-api "1.7.25"]
    [org.slf4j/slf4j-nop "1.7.25"]
 
-   [junit/junit "4.13.1"]
-   ]
+   [junit/junit "4.13.1"]]
 
   :source-paths
   ["src/main/clojure"]
@@ -91,9 +90,11 @@
 
   :plugins
   [[lein-localrepo "0.5.4"]
-   ;[dev.weavejester/lein-cljfmt "0.12.0"]
-   ;[lein-marginalia "0.9.2"]
-   [lein-javac "1.2.1-SNAPSHOT"]]
+   [dev.weavejester/lein-cljfmt "0.12.0"]
+   [lein-marginalia "0.9.2"]
+   ;; todo write-up why we upgraded to 1.3.0
+   [lein-javac "1.3.0"]
+   ]
 
   :pom-addition
   [:properties
