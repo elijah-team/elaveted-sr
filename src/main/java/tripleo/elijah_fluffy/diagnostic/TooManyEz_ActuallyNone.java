@@ -5,7 +5,7 @@ import org.jetbrains.annotations.*;
 import java.io.*;
 import java.util.*;
 
-public class TooManyEz_ActuallyNone implements Diagnostic {
+public class TooManyEz_ActuallyNone implements ElDiagnostic {
 	final String message = "No .ez files found.";
 
 	@Override

@@ -197,7 +197,7 @@ public class EDL_PipelineLogic implements PipelineLogic {
 		}
 
 		@Override
-		public void error(final Diagnostic d) {
+		public void error(final ElDiagnostic d) {
 //			throw new UnintendedUseException();
 		}
 

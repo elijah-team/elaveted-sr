@@ -6,8 +6,8 @@ import org.jetbrains.annotations.*;
 import tripleo.elijah_fluffy.diagnostic.*;
 
 public class Eventual<P> {
-	private final String                              mDescription;
-	private final DeferredObject<P, Diagnostic, Void> prom = new DeferredObject<>();
+	private final String                                mDescription;
+	private final DeferredObject<P, ElDiagnostic, Void> prom = new DeferredObject<>();
 
 	// This is not final so it can change it's spots??
 	private EventualBehavior<P> beh = new DefaultEventualBehavior<>();
@@ -43,7 +43,7 @@ public class Eventual<P> {
 		er.register(this);
 	}
 
-	public void fail(final Diagnostic d) {
+	public void fail(final ElDiagnostic d) {
 		beh.fail(d);
 	}
 
@@ -63,11 +63,11 @@ public class Eventual<P> {
 		return beh.isPending();
 	}
 
-	public void onFail(final FailCallback<Diagnostic> fcb) {
+	public void onFail(final FailCallback<ElDiagnostic> fcb) {
 		beh.onFail(fcb);
 	}
 
-	public void reject(final Diagnostic aReject) {
+	public void reject(final ElDiagnostic aReject) {
 		beh.reject(aReject);
 	}
 
@@ -93,12 +93,12 @@ public class Eventual<P> {
 		return new Eventual<>(new AlreadyEventualBehavior<>(value));
 	}
 
-	public static <T> Eventual<T> failed(Diagnostic value) {
+	public static <T> Eventual<T> failed(ElDiagnostic value) {
 		return new Eventual<>(new FailedEventualBehavior<>(value));
 	}
 
 	private static class DefaultEventualBehavior<P> implements EventualBehavior<P> {
-		private DeferredObject<P, Diagnostic, Void> prom;
+		private DeferredObject<P, ElDiagnostic, Void> prom;
 
 		@Override
 		public void resolve(final P p) {
@@ -126,12 +126,12 @@ public class Eventual<P> {
 		}
 
 		@Override
-		public void onFail(final FailCallback<Diagnostic> fcb) {
+		public void onFail(final FailCallback<ElDiagnostic> fcb) {
 			prom.fail(fcb);
 		}
 
 		@Override
-		public void reject(final Diagnostic aReject) {
+		public void reject(final ElDiagnostic aReject) {
 			prom.reject(aReject);
 		}
 
@@ -152,7 +152,7 @@ public class Eventual<P> {
 	}
 
 	private static class ResettableEventualBehavior<P> implements EventualBehavior<P> {
-		private DeferredObject<P, Diagnostic, Void> prom;
+		private DeferredObject<P, ElDiagnostic, Void> prom;
 
 		@Override
 		public void resolve(final P p) {
@@ -180,12 +180,12 @@ public class Eventual<P> {
 		}
 
 		@Override
-		public void onFail(final FailCallback<Diagnostic> fcb) {
+		public void onFail(final FailCallback<ElDiagnostic> fcb) {
 			prom.fail(fcb);
 		}
 
 		@Override
-		public void reject(final Diagnostic aReject) {
+		public void reject(final ElDiagnostic aReject) {
 			prom.reject(aReject);
 		}
 
@@ -207,9 +207,9 @@ public class Eventual<P> {
 
 	private static class FailedEventualBehavior<P> implements EventualBehavior<P> {
 
-		private final Diagnostic d;
+		private final ElDiagnostic d;
 
-		public FailedEventualBehavior(final Diagnostic aValue) {
+		public FailedEventualBehavior(final ElDiagnostic aValue) {
 			this.d = aValue;
 		}
 
@@ -239,12 +239,12 @@ public class Eventual<P> {
 		}
 
 		@Override
-		public void onFail(final FailCallback<Diagnostic> fcb) {
-			fcb.onFail(Diagnostic.withMessage("-1", "Failed Eventual", Diagnostic.Severity.INFO)); // ??
+		public void onFail(final FailCallback<ElDiagnostic> fcb) {
+			fcb.onFail(ElDiagnostic.withMessage("-1", "Failed Eventual", ElDiagnostic.Severity.INFO)); // ??
 		}
 
 		@Override
-		public void reject(final Diagnostic aReject) {
+		public void reject(final ElDiagnostic aReject) {
 			throw new IllegalStateException();
 		}
 
@@ -264,14 +264,14 @@ public class Eventual<P> {
 		}
 
 		@SuppressWarnings({"unused", "SuspiciousGetterSetter"})
-		public Diagnostic getDiagnostic() {
+		public ElDiagnostic getDiagnostic() {
 			return this.d;
 		}
 	}
 
 	private static class AlreadyEventualBehavior<P> implements EventualBehavior<P> {
-		private final P                                   value;
-		private       DeferredObject<P, Diagnostic, Void> prom;
+		private final P                                     value;
+		private       DeferredObject<P, ElDiagnostic, Void> prom;
 
 		public AlreadyEventualBehavior(final P aValue) {
 			this.value = aValue;
@@ -303,12 +303,12 @@ public class Eventual<P> {
 		}
 
 		@Override
-		public void onFail(final FailCallback<Diagnostic> fcb) {
+		public void onFail(final FailCallback<ElDiagnostic> fcb) {
 			prom.fail(fcb);
 		}
 
 		@Override
-		public void reject(final Diagnostic aReject) {
+		public void reject(final ElDiagnostic aReject) {
 			prom.reject(aReject);
 		}
 
@@ -329,7 +329,7 @@ public class Eventual<P> {
 	}
 
 	private static class NeverEventualBehavior<P> implements EventualBehavior<P> {
-		private DeferredObject<P, Diagnostic, Void> prom;
+		private DeferredObject<P, ElDiagnostic, Void> prom;
 
 		@Override
 		public void resolve(final P p) {
@@ -357,12 +357,12 @@ public class Eventual<P> {
 		}
 
 		@Override
-		public void onFail(final FailCallback<Diagnostic> fcb) {
+		public void onFail(final FailCallback<ElDiagnostic> fcb) {
 			prom.fail(fcb);
 		}
 
 		@Override
-		public void reject(final Diagnostic aReject) {
+		public void reject(final ElDiagnostic aReject) {
 			prom.reject(aReject);
 		}
 

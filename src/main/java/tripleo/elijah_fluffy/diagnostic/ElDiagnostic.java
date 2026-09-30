@@ -17,9 +17,9 @@ import java.util.*;
 /**
  * Created 12/26/20 5:31 AM
  */
-public interface Diagnostic {
-	static @NotNull Diagnostic withMessage(@NotNull String code, String string, @NotNull Severity severity) {
-		return new Diagnostic() {
+public interface ElDiagnostic {
+	static @NotNull ElDiagnostic withMessage(@NotNull String code, String string, @NotNull Severity severity) {
+		return new ElDiagnostic() {
 
 			@Override
 			public String code() {

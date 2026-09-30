@@ -44,14 +44,14 @@ public class EB_Lookup {
                 final @NotNull EN_Name   aliasName      = aliasStatement.getEnName();
                 best = DeduceLookupUtils._resolveAlias2(aliasStatement, deduceTypes2);
             } catch (ResolveError aE) {
-                ev.reject((Diagnostic) aE);
+                ev.reject((ElDiagnostic) aE);
                 return ev;
             }
         }
 
         if (best == null) {
             final ResolveError d = new ResolveError(IdentExpressionImpl.forString(this.lookupName), lrl);
-            ev.reject((Diagnostic) d);
+            ev.reject((ElDiagnostic) d);
             return ev;
         }
 

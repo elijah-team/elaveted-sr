@@ -126,9 +126,9 @@ public enum ResolveType {
 				aR.setResolved((((ClassStatement) best).getOS_Type()));
 			}
 		});
-		ev.onFail(new FailCallback<Diagnostic>() {
+		ev.onFail(new FailCallback<ElDiagnostic>() {
 			@Override
-			public void onFail(final Diagnostic result) {
+			public void onFail(final ElDiagnostic result) {
 				//throw new DiagnosticException(result); // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 				throw new NotImplementedException("lookup failed");
 			}

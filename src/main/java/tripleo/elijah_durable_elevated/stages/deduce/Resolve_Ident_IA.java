@@ -666,7 +666,7 @@ public class Resolve_Ident_IA {
 			resolvedElementPromise().fail(new FailCallback<ResolveError>() {
 				@Override
 				public void onFail(final ResolveError result) {
-					_p_Element.reject((Diagnostic) result);
+					_p_Element.reject((ElDiagnostic) result);
 				}
 			});
 		}

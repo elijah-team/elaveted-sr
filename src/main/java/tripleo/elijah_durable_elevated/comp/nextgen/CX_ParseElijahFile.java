@@ -37,7 +37,7 @@ public class CX_ParseElijahFile {
 				calm = calculate(f, s, compilation, readFile.getLongPath1());
 
 				if (calm.mode() == Mode.FAILURE) {
-					final Diagnostic failure = calm.failure();
+					final ElDiagnostic failure = calm.failure();
 
 					if (failure.get() != null) {
 						final Object e0 = failure.get();
@@ -98,7 +98,7 @@ public class CX_ParseElijahFile {
 				calm = calculate(f, s, compilation, readFile.getLongPath1());
 
 				if (calm.mode() == Mode.FAILURE) {
-					final Diagnostic failure = calm.failure();
+					final ElDiagnostic failure = calm.failure();
 
 					if (failure.get() != null) {
 						final Object e0 = failure.get();

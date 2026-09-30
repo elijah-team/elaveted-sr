@@ -28,7 +28,7 @@ class PL_AddModules implements PipelineLogicRunnable {
 			}
 
 			@Override
-			public void error(final Diagnostic d) {
+			public void error(final ElDiagnostic d) {
 			//	throw new UnintendedUseException();
 			}
 

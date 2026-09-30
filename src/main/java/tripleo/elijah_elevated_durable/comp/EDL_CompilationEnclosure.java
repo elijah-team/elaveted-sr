@@ -550,7 +550,7 @@ public class EDL_CompilationEnclosure
 		}
 
 		@Override
-		public void error(final Diagnostic d) {
+		public void error(final ElDiagnostic d) {
 
 		}
 

@@ -12,7 +12,7 @@ import java.util.*;
  *
  * @param <T>
  */
-public class CodedOperationDiagnostic<T> implements Diagnostic {
+public class CodedOperationDiagnostic<T> implements ElDiagnostic {
 	private final int       code;
 	private final String       message;
 	private final Operation<T> operation;

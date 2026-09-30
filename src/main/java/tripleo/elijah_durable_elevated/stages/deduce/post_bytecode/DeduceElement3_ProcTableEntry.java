@@ -316,9 +316,9 @@ public class DeduceElement3_ProcTableEntry implements IDeduceElement3 {
 			invocation = pte.getFunctionInvocation().getClassInvocation();
 		}
 		if (invocation == null) {
-			final Diagnostic diagnostic = Diagnostic.withMessage("523523",
-																 "can't find invocation in __lfoe_action__getFunctionInvocation",
-																 Diagnostic.Severity.WARN); // "WARN" !!
+			final ElDiagnostic diagnostic = ElDiagnostic.withMessage("523523",
+																	 "can't find invocation in __lfoe_action__getFunctionInvocation",
+																	 ElDiagnostic.Severity.WARN); // "WARN" !!
 			efi.reject(diagnostic);
 			return efi;
 		}

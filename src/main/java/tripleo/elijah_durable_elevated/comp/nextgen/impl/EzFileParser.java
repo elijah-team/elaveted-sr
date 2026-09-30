@@ -31,9 +31,9 @@ public class EzFileParser {
 		ev.then(Sci -> {
 			oci = Operation2.success(Sci);
 		});
-		ev.onFail(new FailCallback<Diagnostic>() {
+		ev.onFail(new FailCallback<ElDiagnostic>() {
 			@Override
-			public void onFail(final Diagnostic d) {
+			public void onFail(final ElDiagnostic d) {
 				oci = Operation2.failure(d);
 			}
 		});
@@ -82,7 +82,7 @@ public class EzFileParser {
 	}
 
 	public class SNCI {
-		private Diagnostic diagnostic;
+		private ElDiagnostic diagnostic;
 
 		public CompilerInstructions get(final @NotNull EzParser parser, final String absolutePath) {
 			final PCon                 pcon         = new PCon();

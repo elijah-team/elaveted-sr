@@ -252,7 +252,7 @@ public class EvaPipeline extends PipelineMember implements AccessBus.AB_LgcListe
 			}
 
 			@Override
-			public void logProgress(final Diagnostic aDiagnostic) {
+			public void logProgress(final ElDiagnostic aDiagnostic) {
 				aOutput.logProgress(aDiagnostic);
 			}
 		};

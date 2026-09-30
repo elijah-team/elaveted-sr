@@ -5,7 +5,7 @@ import org.jetbrains.annotations.*;
 import java.io.*;
 import java.util.*;
 
-public class TooManyEz_BeSpecific implements Diagnostic {
+public class TooManyEz_BeSpecific implements ElDiagnostic {
 	final String message = "Too many .ez files, be specific.";
 
 	@Override

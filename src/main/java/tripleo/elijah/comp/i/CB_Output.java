@@ -14,5 +14,5 @@ public interface CB_Output {
 
 	void print(String s);
 
-	void logProgress(Diagnostic aDiagnostic);
+	void logProgress(ElDiagnostic aDiagnostic);
 }

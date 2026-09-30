@@ -30,7 +30,7 @@ public class QuerySearchEzFiles {
 		return R;
 	}
 
-	public static class Diagnostic_9995 implements Diagnostic {
+	public static class Diagnostic_9995 implements ElDiagnostic {
 		private final File file;
 		private final int  code = 9995;
 

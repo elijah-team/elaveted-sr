@@ -72,9 +72,9 @@ public class EDL_CB_FindStdLibProcess implements CB_Process {
 						_stdLib2.resolve(result);
 					}
 				});
-				stdLib2.onFail(new FailCallback<Diagnostic>() {
+				stdLib2.onFail(new FailCallback<ElDiagnostic>() {
 					@Override
-					public void onFail(final Diagnostic result) {
+					public void onFail(final ElDiagnostic result) {
 						assert false;
 					}
 				});

@@ -8,7 +8,7 @@ public interface CompletableProcess<T> {
 
 	void complete();
 
-	void error(Diagnostic d);
+	void error(ElDiagnostic d);
 
 	void preComplete();
 

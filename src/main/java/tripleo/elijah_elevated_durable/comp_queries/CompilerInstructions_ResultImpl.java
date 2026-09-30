@@ -57,7 +57,7 @@ public class CompilerInstructions_ResultImpl implements CompilerInstructions_Res
 	}
 
 	@Override
-	public void add(final CompilerInstructions aCio, final @Nullable Diagnostic failure, final QSEZ_Reasoning aReasoning) {
+	public void add(final CompilerInstructions aCio, final @Nullable ElDiagnostic failure, final QSEZ_Reasoning aReasoning) {
 		assert failure == null;
 		add(Operation2.success(aCio), aReasoning);
 	}

@@ -899,12 +899,12 @@ public class DeducePhase extends _RegistrationTarget implements ReactiveDimensio
 			return new ClassInvocation(aParent, aConstructorName, aDeduceTypes2Supplier);
 		}
 
-		public Diagnostic new_CouldntGenerateClass(final ClassDefinition aCd, final GenerateFunctions aGf,
-												   final ClassInvocation aCi) {
+		public ElDiagnostic new_CouldntGenerateClass(final ClassDefinition aCd, final GenerateFunctions aGf,
+													 final ClassInvocation aCi) {
 			return new CouldntGenerateClass(aCd, aGf, aCi);
 		}
 
-		public Diagnostic new_CouldntGenerateClass(WlGenerateClass gen, DeducePhase deducePhase) {
+		public ElDiagnostic new_CouldntGenerateClass(WlGenerateClass gen, DeducePhase deducePhase) {
 			return new CouldntGenerateClass(gen, deducePhase);
 		}
 
@@ -1282,7 +1282,7 @@ public class DeducePhase extends _RegistrationTarget implements ReactiveDimensio
 			if (mod == null)
 				mod = aClassInvocation.getKlass().getContext().module();
 
-			DeferredObject<ClassDefinition, Diagnostic, Void> prom = new DeferredObject<>();
+			DeferredObject<ClassDefinition, ElDiagnostic, Void> prom = new DeferredObject<>();
 
 			final GenerateFunctions generateFunctions = generatePhase.getGenerateFunctions(mod);
 			wl.addJob(_inj().new_WlGenerateClass(generateFunctions, aClassInvocation, generatedClasses,

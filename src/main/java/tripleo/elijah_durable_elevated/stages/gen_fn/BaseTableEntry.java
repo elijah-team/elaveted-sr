@@ -30,9 +30,9 @@ public abstract class BaseTableEntry {
 		void onChange(IElementHolder eh, Status newStatus);
 	}
 
-	protected final DeferredObject2<OS_Element, Diagnostic, Void> _p_elementPromise = new DeferredObject2<OS_Element, Diagnostic, Void>() {
+	protected final DeferredObject2<OS_Element, ElDiagnostic, Void> _p_elementPromise = new DeferredObject2<OS_Element, ElDiagnostic, Void>() {
 		@Override
-		public Deferred<OS_Element, Diagnostic, Void> resolve(final @Nullable OS_Element resolve) {
+		public Deferred<OS_Element, ElDiagnostic, Void> resolve(final @Nullable OS_Element resolve) {
 			if (resolve == null) {
 				if (BaseTableEntry.this instanceof VariableTableEntry vte) {
 					switch (vte.getVtt()) {
@@ -66,7 +66,7 @@ public abstract class BaseTableEntry {
 		statusListenerList.add(sl);
 	}
 
-	public void elementPromise(@Nullable DoneCallback<OS_Element> dc, @Nullable FailCallback<Diagnostic> fc) {
+	public void elementPromise(@Nullable DoneCallback<OS_Element> dc, @Nullable FailCallback<ElDiagnostic> fc) {
 		if (dc != null)
 			_p_elementPromise.then(dc);
 		if (fc != null)

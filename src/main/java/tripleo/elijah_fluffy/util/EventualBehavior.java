@@ -1,7 +1,6 @@
 package tripleo.elijah_fluffy.util;
 
 import org.jdeferred2.*;
-import org.jetbrains.annotations.*;
 import tripleo.elijah_fluffy.diagnostic.*;
 
 public interface EventualBehavior<P> {
@@ -11,7 +10,7 @@ public interface EventualBehavior<P> {
 
 	//void register(@NotNull EventualRegister ev);
 
-	default void fail(Diagnostic d) {
+	default void fail(ElDiagnostic d) {
 		reject(d);
 	}
 
@@ -23,9 +22,9 @@ public interface EventualBehavior<P> {
 
 	boolean isPending();
 
-	void onFail(FailCallback<Diagnostic> fcb);
+	void onFail(FailCallback<ElDiagnostic> fcb);
 
-	void reject(Diagnostic aReject);
+	void reject(ElDiagnostic aReject);
 
 	boolean isRejected();
 

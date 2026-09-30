@@ -10,7 +10,7 @@ import tripleo.elijah_durable_elevated.stages.deduce.post_bytecode.*;
 import tripleo.elijah_durable_elevated.stages.gen_fn.*;
 import tripleo.elijah_durable_elevated.stages.instructions.*;
 import tripleo.elijah_fluffy.diagnostic.*;
-import tripleo.elijah_fluffy.diagnostic.Diagnostic.*;
+import tripleo.elijah_fluffy.diagnostic.ElDiagnostic.*;
 import tripleo.elijah_fluffy.util.*;
 
 import java.text.*;
@@ -60,7 +60,7 @@ class GI_ProcIA implements GenerateC_Item {
 			return Operation2.success(new EG_SingleStatement(s, EX_Explanation.withMessage("aaa")));
 		}
 
-		return Operation2.failure(Diagnostic.withMessage("12900", "no construct possible for GI_Proc", Severity.INFO));
+		return Operation2.failure(ElDiagnostic.withMessage("12900", "no construct possible for GI_Proc", Severity.INFO));
 	}
 
 	public String getAssignmentValue(final @NotNull Instruction aInstruction, final @NotNull GenerateC gc) {

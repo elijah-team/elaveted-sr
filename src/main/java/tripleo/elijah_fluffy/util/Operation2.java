@@ -28,7 +28,7 @@ public class Operation2<T> {
 		return op2;
 	}
 
-	public static <T> @NotNull Operation2<T> failure(final Diagnostic aException) {
+	public static <T> @NotNull Operation2<T> failure(final ElDiagnostic aException) {
 		final Operation2<T> op = new Operation2<>(null, aException, Mode.FAILURE);
 		return op;
 	}
@@ -42,9 +42,9 @@ public class Operation2<T> {
 
 	private final T succ;
 
-	private final Diagnostic exc;
+	private final ElDiagnostic exc;
 
-	public Operation2(final T aSuccess, final Diagnostic aException, final Mode aMode) {
+	public Operation2(final T aSuccess, final ElDiagnostic aException, final Mode aMode) {
 		succ = aSuccess;
 		exc = aException;
 		mode = aMode;
@@ -57,7 +57,7 @@ public class Operation2<T> {
 		return Operation2.failure(new ExceptionDiagnostic(aE));
 	}
 
-	public Diagnostic failure() {
+	public ElDiagnostic failure() {
 		return exc;
 	}
 

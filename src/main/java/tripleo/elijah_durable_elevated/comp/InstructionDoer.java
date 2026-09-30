@@ -42,7 +42,7 @@ public class InstructionDoer implements CompletableProcess<CompilerInstructions>
 	}
 
 	@Override
-	public void error(final Diagnostic d) {
+	public void error(final ElDiagnostic d) {
 		tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("InstructionDoer::error");
 	}
 

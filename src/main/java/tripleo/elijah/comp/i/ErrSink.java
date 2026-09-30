@@ -29,7 +29,7 @@ public interface ErrSink {
 
 	List<Pair<Errors, Object>> list();
 
-	void reportDiagnostic(Diagnostic diagnostic);
+	void reportDiagnostic(ElDiagnostic diagnostic);
 
 	/* @ ensures errorCount() == \old errorCount + 1 */
 	void reportError(String s);

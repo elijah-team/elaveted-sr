@@ -36,7 +36,7 @@ public class Operation<T> /* extends Operation2<T> */ {
 	public static <T> Operation<T> convert(final Operation2<T> aOperation2) {
 		switch (aOperation2.mode()) {
 		case FAILURE -> {
-			final Diagnostic failure = aOperation2.failure();
+			final ElDiagnostic failure = aOperation2.failure();
 			return Operation.failure(failure);
 		}
 		case SUCCESS -> {
@@ -46,7 +46,7 @@ public class Operation<T> /* extends Operation2<T> */ {
 		}
 	}
 
-	private static <T> Operation<T> failure(final Diagnostic aFailure) {
+	private static <T> Operation<T> failure(final ElDiagnostic aFailure) {
 		return new Operation<>(null, new DiagnosticException(aFailure), Mode.FAILURE);
 	}
 

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.*;
 import java.io.*;
 import java.util.*;
 
-public class Diagnostic_9995 implements Diagnostic {
+public class Diagnostic_9995 implements ElDiagnostic {
 	private final TextLocatable locatable;
 	private final File          file;
 

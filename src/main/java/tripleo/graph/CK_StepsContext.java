@@ -7,7 +7,7 @@ import tripleo.elijah_fluffy.util.*;
 public interface CK_StepsContext {
 	void addOutputString(CB_OutputString os);
 
-	void addDiagnostic(Diagnostic d);
+	void addDiagnostic(ElDiagnostic d);
 
 	Operation<Ok> getExecutionResult();
 

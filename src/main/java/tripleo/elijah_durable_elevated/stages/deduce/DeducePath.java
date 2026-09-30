@@ -289,7 +289,7 @@ public class DeducePath {
 	}
 
 	public void getElementPromise(int aIndex, DoneCallback<OS_Element> aOS_elementDoneCallback,
-			FailCallback<Diagnostic> aDiagnosticFailCallback) {
+			FailCallback<ElDiagnostic> aDiagnosticFailCallback) {
 		getEntry(aIndex).elementPromise(aOS_elementDoneCallback, aDiagnosticFailCallback);
 	}
 
@@ -340,12 +340,12 @@ public class DeducePath {
 					gt2 = identTableEntry.type.getGenType();
 					typesP[aIndex].resolve(gt2);
 				} else {
-					typesP[aIndex].reject((Diagnostic) null);
+					typesP[aIndex].reject((ElDiagnostic) null);
 				}
 			} else if (ia2 instanceof ProcIA) {
 				final @NotNull ProcTableEntry procTableEntry = ((ProcIA) ia2).getEntry();
 				// procTableEntry.getResolvedElement(); // .expression?
-				typesP[aIndex].reject((Diagnostic) null);
+				typesP[aIndex].reject((ElDiagnostic) null);
 			} else {
 				// README shouldn't be calling for other subclasses
 				typesP[aIndex].reject(new NotTypeableDiagnostic(ia2));

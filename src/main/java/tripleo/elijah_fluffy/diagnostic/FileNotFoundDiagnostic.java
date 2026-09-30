@@ -5,7 +5,7 @@ import org.jetbrains.annotations.*;
 import java.io.*;
 import java.util.*;
 
-public class FileNotFoundDiagnostic implements Diagnostic {
+public class FileNotFoundDiagnostic implements ElDiagnostic {
 	private final File f;
 
 	public FileNotFoundDiagnostic(final File aLocal_prelude) {

@@ -7,7 +7,7 @@ import tripleo.elijah_fluffy.diagnostic.*;
 import java.io.*;
 import java.util.*;
 
-class NotTypeableDiagnostic implements Diagnostic {
+class NotTypeableDiagnostic implements ElDiagnostic {
     private final InstructionArgument subject;
 
     public NotTypeableDiagnostic(final InstructionArgument aInstructionArgument) {

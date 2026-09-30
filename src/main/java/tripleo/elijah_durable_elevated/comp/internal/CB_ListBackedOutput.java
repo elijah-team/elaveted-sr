@@ -29,7 +29,7 @@ public class CB_ListBackedOutput implements CB_Output {
 	}
 
 	@Override
-	public void logProgress(final Diagnostic aDiagnostic) {
+	public void logProgress(final ElDiagnostic aDiagnostic) {
 		if (aDiagnostic instanceof CodedOperationDiagnostic<?> coded) {
 			logProgress(coded.intCode(), coded.message());
 		} else {

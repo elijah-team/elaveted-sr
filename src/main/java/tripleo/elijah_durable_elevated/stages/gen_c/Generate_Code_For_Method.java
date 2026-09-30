@@ -84,7 +84,7 @@ public class Generate_Code_For_Method {
 		final Operation2<OS_Type> diag1 = de_vte.decl_test_001(yf.cheat());
 
 		if (diag1.mode() == Mode.FAILURE) {
-			final Diagnostic      diag_ = diag1.failure();
+			final ElDiagnostic    diag_ = diag1.failure();
 			final GCFM_Diagnostic diag  = (GCFM_Diagnostic) diag_;
 
 			switch (diag.severity()) {

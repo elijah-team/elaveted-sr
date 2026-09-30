@@ -24,5 +24,5 @@ public interface CompilerInstructions_Result {
 
 	void advise(CompilationClosure aCompilationClosure);
 
-	void add(CompilerInstructions aCio, final @Nullable Diagnostic failure, final QSEZ_Reasoning aReasoning);
+	void add(CompilerInstructions aCio, final @Nullable ElDiagnostic failure, final QSEZ_Reasoning aReasoning);
 }

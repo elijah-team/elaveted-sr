@@ -5,7 +5,7 @@ import org.jetbrains.annotations.*;
 import java.io.*;
 import java.util.*;
 
-public class ExceptionDiagnostic implements Diagnostic {
+public class ExceptionDiagnostic implements ElDiagnostic {
 	private final Throwable e;
 
 	public ExceptionDiagnostic(final Throwable aE) {

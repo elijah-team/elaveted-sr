@@ -20,7 +20,7 @@ import java.util.stream.*;
 /**
  * Created 12/26/20 5:08 AM
  */
-public class ResolveError extends GResolveError implements Diagnostic {
+public class ResolveError extends GResolveError implements ElDiagnostic {
 	private final @org.jetbrains.annotations.Nullable IdentExpression ident;
 	private final LookupResultList lrl;
 	private final @org.jetbrains.annotations.Nullable TypeName typeName;

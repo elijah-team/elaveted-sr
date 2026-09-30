@@ -8,7 +8,7 @@ import java.util.*;
 
 public abstract class CK_AbstractStepsContext implements CK_StepsContext {
 	private final List<CB_OutputString> lo = new ArrayList<>();
-	private final List<Diagnostic>      ld = new ArrayList<>();
+	private final List<ElDiagnostic>    ld = new ArrayList<>();
 
 	@Override
 	public void addOutputString(final CB_OutputString os) {
@@ -16,7 +16,7 @@ public abstract class CK_AbstractStepsContext implements CK_StepsContext {
 	}
 
 	@Override
-	public void addDiagnostic(final Diagnostic d) {
+	public void addDiagnostic(final ElDiagnostic d) {
 
 	}
 

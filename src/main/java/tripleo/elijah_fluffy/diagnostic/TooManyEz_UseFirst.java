@@ -5,7 +5,7 @@ import org.jetbrains.annotations.*;
 import java.io.*;
 import java.util.*;
 
-class TooManyEz_UseFirst implements Diagnostic {
+class TooManyEz_UseFirst implements ElDiagnostic {
 	final String message = "Too many .ez files, using first.";
 
 	@Override

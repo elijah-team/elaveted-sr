@@ -7,7 +7,7 @@ import tripleo.elijah_fluffy.util.*;
 import java.io.*;
 import java.util.*;
 
-public class ZeroPotentialDiagnostic implements Diagnostic {
+public class ZeroPotentialDiagnostic implements ElDiagnostic {
 	@Override
 	public @Nullable String code() {
 		NotImplementedException.raise();

@@ -11,9 +11,9 @@ import tripleo.elijah_fluffy.util.*;
 public class DeduceElement3_ConstantTableEntry implements IDeduceElement3 {
 
 	private final    ConstantTableEntry principal;
-	public           DeduceTypes2       deduceTypes2;
-	public           Diagnostic         diagnostic;
-	public           IDeduceElement3    deduceElement3;
+	public DeduceTypes2    deduceTypes2;
+	public ElDiagnostic    diagnostic;
+	public IDeduceElement3 deduceElement3;
 	public           BaseEvaFunction    generatedFunction;
 	public @Nullable OS_Type            osType;
 	private          GenType            genType;

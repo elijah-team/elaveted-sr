@@ -22,7 +22,7 @@ import tripleo.elijah_durable_elevated.stages.deduce.post_bytecode.DED.*;
 import tripleo.elijah_durable_elevated.stages.gen_fn.*;
 import tripleo.elijah_durable_elevated.stages.instructions.*;
 import tripleo.elijah_fluffy.diagnostic.*;
-import tripleo.elijah_fluffy.diagnostic.Diagnostic.*;
+import tripleo.elijah_fluffy.diagnostic.ElDiagnostic.*;
 import tripleo.elijah_fluffy.util.*;
 
 import java.io.*;
@@ -703,7 +703,7 @@ public class DeduceElement3_VariableTableEntry extends DefaultStateful implement
 
 		final OS_Type x = vte.getTypeTableEntry().getAttached();
 		if (x == null && vte.potentialTypes().isEmpty()) {
-			final Diagnostic diag;
+			final ElDiagnostic diag;
 			if (vte.getVtt() == VariableTableType.TEMP) {
 				diag = /* dt2._inj().new_ */new Diagnostic_8884(vte, gf);
 			} else {

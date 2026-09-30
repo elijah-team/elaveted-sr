@@ -23,7 +23,7 @@ import java.util.*;
  * Created 3/16/21 10:45 AM
  */
 public abstract class EvaContainerNC extends AbstractDependencyTracker implements EvaContainer, IDependencyReferent {
-	static class VarNotFound implements Diagnostic {
+	static class VarNotFound implements ElDiagnostic {
 		@Override
 		public @Nullable String code() {
 			return null;
@@ -50,8 +50,8 @@ public abstract class EvaContainerNC extends AbstractDependencyTracker implement
 		}
 	}
 
-	static @NotNull Diagnostic                    _def_VarNotFound = new VarNotFound();
-	private final   Dependency                    dependency       = new Dependency(this);
+	static @NotNull ElDiagnostic _def_VarNotFound = new VarNotFound();
+	private final   Dependency   dependency       = new Dependency(this);
 	public @NotNull Map<ClassStatement, EvaClass> classMap         = new HashMap<ClassStatement, EvaClass>();
 	public @NotNull Map<FunctionDef, EvaFunction> functionMap = new HashMap<FunctionDef, EvaFunction>();
 	public @NotNull List<VarTableEntry> varTable = new ArrayList<VarTableEntry>();

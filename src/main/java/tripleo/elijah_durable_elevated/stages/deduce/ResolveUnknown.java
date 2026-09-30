@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Created 9/9/21 6:25 AM
  */
-public class ResolveUnknown implements Diagnostic {
+public class ResolveUnknown implements ElDiagnostic {
 	@Override
 	public @NotNull String code() {
 		return "E1003";

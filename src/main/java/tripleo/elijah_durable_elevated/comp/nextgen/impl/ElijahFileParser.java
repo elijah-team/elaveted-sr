@@ -28,9 +28,9 @@ public class ElijahFileParser {
 		ev.then(Sci -> {
 			op = Operation2.success(Sci);
 		});
-		ev.onFail(new FailCallback<Diagnostic>() {
+		ev.onFail(new FailCallback<ElDiagnostic>() {
 			@Override
-			public void onFail(final Diagnostic d) {
+			public void onFail(final ElDiagnostic d) {
 				op = Operation2.failure(d);
 			}
 		});

@@ -6,7 +6,7 @@ import tripleo.elijah_fluffy.diagnostic.*;
 import java.io.*;
 import java.util.*;
 
-public interface GCFM_Diagnostic extends Diagnostic {
+public interface GCFM_Diagnostic extends ElDiagnostic {
 	static @NotNull GCFM_Diagnostic forThis(final @NotNull String aMessage, final @NotNull String aCode,
 			final @NotNull Severity aSeverity) {
 		return new GCFM_Diagnostic() {

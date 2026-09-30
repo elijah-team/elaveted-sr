@@ -55,8 +55,8 @@ public class StdErrSink implements ErrSink {
 	}
 
 	@Override
-	public void reportDiagnostic(@NotNull Diagnostic diagnostic) {
-		if (diagnostic.severity() == Diagnostic.Severity.ERROR)
+	public void reportDiagnostic(@NotNull ElDiagnostic diagnostic) {
+		if (diagnostic.severity() == ElDiagnostic.Severity.ERROR)
 			_errorCount++;
 		_list.add(Pair.of(Errors.DIAGNOSTIC, diagnostic));
 		// 08/13 diagnostic.report(System.err);

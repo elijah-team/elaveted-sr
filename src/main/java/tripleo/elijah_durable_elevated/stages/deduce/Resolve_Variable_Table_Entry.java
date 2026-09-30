@@ -365,8 +365,8 @@ class Resolve_Variable_Table_Entry {
 					return Operation2.success(ns);
 				} else {
 					LOG.err("__MODULE__ should be namespace");
-					return Operation2.failure(Diagnostic.withMessage("9328", "__MODULE__ should be namespace",
-							Diagnostic.Severity.ERROR));
+					return Operation2.failure(ElDiagnostic.withMessage("9328", "__MODULE__ should be namespace",
+																	   ElDiagnostic.Severity.ERROR));
 				}
 			} else {
 				// not found, so add. this is where AST would come in handy

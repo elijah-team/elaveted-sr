@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Created 3/5/22 4:55 PM
  */
-public class CouldntGenerateClass implements Diagnostic {
+public class CouldntGenerateClass implements ElDiagnostic {
 	private final ClassDefinition   classDefinition;
 	private final GClassInvocation   classInvocation;
 	private final GGenerateFunctions generateFunctions;

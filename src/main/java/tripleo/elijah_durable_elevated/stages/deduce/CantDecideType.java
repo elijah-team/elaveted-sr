@@ -20,7 +20,7 @@ import java.util.stream.*;
 /**
  * Created 4/13/21 5:46 AM
  */
-public class CantDecideType implements Diagnostic {
+public class CantDecideType implements ElDiagnostic {
 	private final @NotNull Collection<TypeTableEntry> types;
 	private final          VariableTableEntry         vte;
 

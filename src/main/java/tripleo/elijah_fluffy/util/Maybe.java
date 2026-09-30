@@ -5,10 +5,10 @@ import tripleo.elijah_fluffy.diagnostic.*;
 
 
 public class Maybe<T> {
-	public final @Nullable Diagnostic exc;
-	public final @Nullable T o;
+	public final @Nullable ElDiagnostic exc;
+	public final @Nullable T            o;
 
-	public Maybe(final @Nullable T o, final Diagnostic exc) {
+	public Maybe(final @Nullable T o, final ElDiagnostic exc) {
 		if (o == null) {
 			if (exc == null) {
 				throw new IllegalStateException("Both o and exc are null!");
@@ -27,7 +27,7 @@ public class Maybe<T> {
 		return new Maybe<>(t, null);
 	}
 
-	public static <T> Maybe<T> of_exc(@NotNull Diagnostic d) {
+	public static <T> Maybe<T> of_exc(@NotNull ElDiagnostic d) {
 		return new Maybe<>(null, d);
 	}
 

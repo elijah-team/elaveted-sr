@@ -45,7 +45,7 @@ public class LawabidingcitizenPipelineImpl {
 			}
 
 			@Override
-			public void error(Diagnostic d) {
+			public void error(ElDiagnostic d) {
 
 			}
 

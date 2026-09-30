@@ -97,7 +97,7 @@ public interface PipelineLogic extends EventualRegister, GPipelineLogic {
 		}
 
 		@Override
-		public void error(final Diagnostic d) {
+		public void error(final ElDiagnostic d) {
 			throw new UnintendedUseException("not expected, remove after tests");
 		}
 

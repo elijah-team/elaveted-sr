@@ -25,8 +25,8 @@ public class DeferredMemberFunction {
 	private final DeferredObject<BaseEvaFunction, Void, Void> externalRef;
 	private final @NotNull FunctionDef functionDef;
 	private final @NotNull FunctionInvocation functionInvocation;
-	private final @NotNull OS_Element parent;
-	private final DeferredObject<GenType, Diagnostic, Void> typePromise;
+	private final @NotNull OS_Element                         parent;
+	private final DeferredObject<GenType, ElDiagnostic, Void> typePromise;
 	/**
 	 * A {@link ClassInvocation} or
 	 * {@link NamespaceInvocation}. useless if parent
@@ -36,7 +36,7 @@ public class DeferredMemberFunction {
 	 * role value is
 	 * {@link DeduceTypes2.MemberInvocation.Role#INHERITED}
 	 */
-	private @Nullable IInvocation invocation;
+	private @Nullable IInvocation                             invocation;
 
 	public DeferredMemberFunction(final @NotNull OS_Element aParent, final @Nullable IInvocation aInvocation,
 			final @NotNull FunctionDef aBaseFunctionDef, final @NotNull DeduceTypes2 aDeduceTypes2,
@@ -106,12 +106,12 @@ public class DeferredMemberFunction {
 		return "DeferredMemberFunction{" + "parent=" + parent + ", functionName=" + functionDef.name() + '}';
 	}
 
-	public @NotNull Promise<GenType, Diagnostic, Void> typePromise() {
+	public @NotNull Promise<GenType, ElDiagnostic, Void> typePromise() {
 		return typePromise;
 	}
 
 	// for DeducePhase
-	public @NotNull DeferredObject<GenType, Diagnostic, Void> typeResolved() {
+	public @NotNull DeferredObject<GenType, ElDiagnostic, Void> typeResolved() {
 		return typePromise;
 	}
 }
