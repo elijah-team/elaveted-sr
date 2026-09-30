@@ -556,38 +556,12 @@ public class EDL_CompilationEnclosure
 
 		@Override
 		public void preComplete() {
-//			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] preComplete");
+			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] preComplete");
 		}
 
 		@Override
 		public void start() {
-//			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] start");
-		}
-
-	}
-
-	public class OFA implements Iterable<Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest>> {
-
-		// public OFA(final List<Triple<AssOutFile, EOT_OutputFile.FileNameProvider,
-		// NG_OutputRequest>> aOutFileAssertions) {
-		// _l = aOutFileAssertions;
-		// }
-
-		public boolean contains(String aFileName) {
-			for (Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest> outFileAssertion : outFileAssertions) {
-				final String containedFilename = outFileAssertion.getMiddle().getFilename();
-
-				if (containedFilename.equals(aFileName)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		@Override
-		public Iterator<Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest>> iterator() {
-			return outFileAssertions.stream().iterator();
+			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] start");
 		}
 	}
 }
