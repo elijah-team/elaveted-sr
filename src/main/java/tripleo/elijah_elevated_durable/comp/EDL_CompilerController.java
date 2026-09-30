@@ -41,14 +41,7 @@ public class EDL_CompilerController implements CompilerController {
 				final CK_Markers res = new CK_Markers() {
 					@Override
 					public void add(final CK_Marker aCKMarker) {
-						final CompilationInterfaceRevised revised = revised();
-						if (revised == null) {
-							cP.then(Sc -> {
-								Sc.revised().addMarker(aCKMarker);
-							});
-						} else {
-							revised.addMarker(aCKMarker);
-						}
+						cP.then(Sc -> Sc.revised().addMarker(aCKMarker));
 					}
 
 					@Override

@@ -5,6 +5,7 @@ import tripleo.elijah_elevated_durable.comp.*;
 
 import java.util.*;
 
+@SuppressWarnings("UnusedReturnValue")
 public interface CompilationInterfaceRevised {
 
 	/// Try to hide this.

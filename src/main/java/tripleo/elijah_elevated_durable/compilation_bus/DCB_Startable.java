@@ -25,6 +25,10 @@ public class DCB_Startable implements CompFactory.StartableI {
 	public void run() {
 		// FIXME passing sh*t between threads (P.O.!)
 		logProgress(DefaultCompilationBus_POLL_PROCESS, new Object[]{});
+
+
+
+
 		long x = 0;
 		while (x < 12) {
 			final CB_Process poll = processQueue.poll();
@@ -43,6 +47,13 @@ public class DCB_Startable implements CompFactory.StartableI {
 			}
 			++x;
 		}
+
+
+
+
+
+		
+
 		logProgress(DefaultCompilationBus_POLL_PROCESS_EMPTY_END, new Object[]{});
 	}
 

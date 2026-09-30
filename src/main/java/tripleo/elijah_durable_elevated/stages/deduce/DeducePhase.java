@@ -33,11 +33,11 @@ import tripleo.elijah_durable_elevated.stages.deduce.post_bytecode.*;
 import tripleo.elijah_durable_elevated.stages.gen_fn.*;
 import tripleo.elijah_durable_elevated.stages.gen_generic.*;
 import tripleo.elijah_durable_elevated.stages.logging.*;
-import tripleo.elijah_durable_elevated.stages.post_deduce.*;
 import tripleo.elijah_durable_elevated.work.*;
 import tripleo.elijah_elevated_durable.backbone.*;
 import tripleo.elijah_elevated_durable.comp.*;
 import tripleo.elijah_elevated_durable.lang_model.*;
+import tripleo.elijah_elevated_durable.world_impl.*;
 import tripleo.elijah_fluffy.diagnostic.*;
 import tripleo.elijah_fluffy.util.*;
 
@@ -97,7 +97,8 @@ public class DeducePhase extends _RegistrationTarget implements ReactiveDimensio
 		generatePhase = pipelineLogic.generatePhase;
 
 		// created
-		codeRegistrar = _inj().new_DefaultCodeRegistrar((EDL_ICompilation) ca.getCompilation());
+		final EDL_ICompilation compilation = (EDL_ICompilation) ca.getCompilation();
+		codeRegistrar = _inj().new_DefaultCodeRegistrar(compilation);
 		LOG           = _inj().new_ElLog("(DEDUCE_PHASE)", pipelineLogic.getVerbosity(), PHASE);
 
 		// using
@@ -917,7 +918,10 @@ public class DeducePhase extends _RegistrationTarget implements ReactiveDimensio
 		}
 
 		public ICodeRegistrar new_DefaultCodeRegistrar(final EDL_ICompilation aCompilation) {
-			return new DefaultCodeRegistrar(aCompilation);
+			final EDL_Compilation   compilation = (EDL_Compilation) aCompilation;
+			final DefaultLivingRepo world       = (DefaultLivingRepo) compilation.world();
+			return world.getDefaultCodeRegistrar(compilation);
+
 		}
 
 		public DeferredMemberFunctionParentIsClassStatement new_DeferredMemberFunctionParentIsClassStatement(

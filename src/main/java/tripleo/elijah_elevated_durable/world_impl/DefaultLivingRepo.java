@@ -8,11 +8,11 @@ import tripleo.elijah.world.i.*;
 import tripleo.elijah_durable_elevated.entrypoints.*;
 import tripleo.elijah_durable_elevated.lang.impl.*;
 import tripleo.elijah_durable_elevated.stages.gen_fn.*;
+import tripleo.elijah_durable_elevated.stages.gen_generic.*;
+import tripleo.elijah_durable_elevated.stages.post_deduce.*;
 import tripleo.elijah_durable_elevated.util.*;
-import tripleo.elijah_durable_elevated.world.i.ElevatedLivingClass;
-import tripleo.elijah_durable_elevated.world.i.ElevatedLivingFunction;
-import tripleo.elijah_durable_elevated.world.i.LivingRepo;
 import tripleo.elijah_durable_elevated.world.i.*;
+import tripleo.elijah_durable_elevated.world.i.LivingRepo;
 import tripleo.elijah_elevated_durable.comp.*;
 import tripleo.elijah_fluffy.util.*;
 
@@ -23,14 +23,15 @@ import java.util.stream.*;
 public class DefaultLivingRepo implements LivingRepo {
 	private final @NotNull ObservableCompletableProcess<WorldModule> wmo = new ObservableCompletableProcess<>();
 
-	private final Map<String, OS_Package> _packages = new HashMap<>();
-	private final Set<WorldModule>                                          _modules    = new HashSet<>();
+	private final          Map<String, OS_Package>                          _packages   = new HashMap<>();
+	private final          Set<WorldModule>                                 _modules    = new HashSet<>();
 	private final @NotNull List<LivingNode>                                 repo        = new ArrayList<>();
 	private final @NotNull Multimap<BaseEvaFunction, DefaultLivingFunction> functionMap = ArrayListMultimap.create();
 
-	private int _classCode = 101;
-	private int _functionCode = 1001;
-	private int _packageCode = 1;
+	private int                  _classCode    = 101;
+	private int                  _functionCode = 1001;
+	private int                  _packageCode  = 1;
+	private DefaultCodeRegistrar _defaultCodeRegistrar;
 
 	@Override
 	public Collection<WorldModule> getMods__() {
@@ -54,7 +55,7 @@ public class DefaultLivingRepo implements LivingRepo {
 
 	@Override
 	public @NotNull DefaultLivingFunction addFunction(final @NotNull BaseEvaFunction aFunction,
-			final @NotNull Add addFlag) {
+													  final @NotNull Add addFlag) {
 		switch (addFlag) {
 		case NONE -> {
 			aFunction.setCode(nextFunctionCode());
@@ -84,7 +85,7 @@ public class DefaultLivingRepo implements LivingRepo {
 	@Override
 	public @NotNull DefaultLivingClass addClass(final @NotNull EvaClass aClass, final @NotNull Add addFlag) {
 		DefaultLivingClass living = null;
-		boolean set = false;
+		boolean            set    = false;
 
 		switch (addFlag) {
 		case NONE -> {
@@ -133,8 +134,8 @@ public class DefaultLivingRepo implements LivingRepo {
 
 	//@Override
 	public void addModule(final @NotNull OS_Module mod,
-	                      final @NotNull String aFilename,
-	                      final @NotNull EDL_ICompilation aC) {
+						  final @NotNull String aFilename,
+						  final @NotNull EDL_ICompilation aC) {
 //		tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_out_4("LivingRepo::addModule >> " + aFilename);
 
 //		var t = aC.getCompilerInputListener();
@@ -157,7 +158,7 @@ public class DefaultLivingRepo implements LivingRepo {
 
 	@Override
 	public @NotNull DefaultLivingNamespace addNamespace(final @NotNull EvaNamespace aNamespace,
-			final @NotNull Add addFlag) {
+														final @NotNull Add addFlag) {
 		switch (addFlag) {
 		case NONE -> {
 			aNamespace.setCode(nextClassCode());
@@ -352,5 +353,14 @@ public class DefaultLivingRepo implements LivingRepo {
 		int i = _packageCode;
 		_packageCode++;
 		return i;
+	}
+
+	public ICodeRegistrar getDefaultCodeRegistrar(final EDL_ICompilation c) {
+		if (null == this._defaultCodeRegistrar && c != null) {
+			final LivingRepo world = c.world();
+			assert world == this;
+			this._defaultCodeRegistrar = new DefaultCodeRegistrar(world);
+		}
+		return this._defaultCodeRegistrar;
 	}
 }

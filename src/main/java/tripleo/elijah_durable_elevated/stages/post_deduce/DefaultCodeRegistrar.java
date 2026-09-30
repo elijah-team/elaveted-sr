@@ -1,19 +1,18 @@
 package tripleo.elijah_durable_elevated.stages.post_deduce;
 
-import tripleo.elijah_elevated_durable.comp.EDL_ICompilation;
 import tripleo.elijah_durable_elevated.stages.gen_fn.*;
 import tripleo.elijah_durable_elevated.stages.gen_generic.ICodeRegistrar;
 import tripleo.elijah_durable_elevated.world.i.LivingRepo;
 
 public class DefaultCodeRegistrar implements ICodeRegistrar {
-	private final EDL_ICompilation compilation;
+	private final LivingRepo       livingRepo;
 
-	public DefaultCodeRegistrar(final EDL_ICompilation aC) {
-		compilation = aC;
+	public DefaultCodeRegistrar(final LivingRepo aLivingRepo) {
+		this.livingRepo = aLivingRepo;
 	}
 
 	private LivingRepo getLivingRepo() {
-		return compilation.world();
+		return livingRepo;
 	}
 
 	@Override

@@ -8,6 +8,7 @@
  */
 package tripleo.elijah_elevated_durable.comp;
 
+import tripleo.elijah.comp.IO;
 import clojure.lang.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
