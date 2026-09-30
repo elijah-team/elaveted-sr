@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>elaveted-lein</groupId>
+  <groupId>tripleo.elijah</groupId>
   <artifactId>elaveted-lein</artifactId>
   <packaging>jar</packaging>
-  <version>2025.99.100-SNAPSHOT</version>
+  <version>2026.0930.002</version>
   <name>elaveted-lein</name>
   <description/>
   <scm>
-    <tag>436a5e479eabf29562aa36bf6f5b758ea662b0d7</tag>
+    <url>https://github.com/elijah-team/elaveted-sr</url>
+    <connection>scm:git:git://github.com/elijah-team/elaveted-sr.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/elijah-team/elaveted-sr.git</developerConnection>
+    <tag>a530939952e557544137f8b4220e0c5debd8f013</tag>
   </scm>
   <build>
     <sourceDirectory>src/main/clojure</sourceDirectory>
