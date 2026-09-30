@@ -39,29 +39,28 @@ public class EDL_CompilationEnclosure
 		CompilationEnclosure
 //		, EDL_SPI_CompilationEnclosure
 				, EDL_SPI_PipelineAccess {
-	public final  Eventual<IPipelineAccess>       pipelineAccessPromise = new Eventual<>();
-	private final Eventual<EDL_CompilationRunner> ecr                   = new Eventual<>();
-	private final Eventual<AccessBus>             accessBusPromise      = new Eventual<>();
-	private final EDL_ICompilation                compilation;
-	private final          CB_Output                                                        _cbOutput             = new CB_ListBackedOutput();
-	private final          Map<String, PipelinePlugin>                                      pipelinePlugins       = new HashMap<>();
-	private final          Map<OS_Module, ModuleThing>                                      moduleThings          = new HashMap<>();
-	private final          Subject<ReactiveDimension>                                       dimensionSubject      = ReplaySubject.create();
-	private final          Subject<Reactivable>                                             reactivableSubject    = ReplaySubject.create();
-	private final          Observer<ReactiveDimension>                                      dimensionObserver     = new __ReactiveDimensionObserver();
-	private final          Observer<Reactivable>                                            reactivableObserver   = new __ReactivableObserver();
-	private final @NonNull List<ElLog>                                                      elLogs                = new LinkedList<>();
-	private final          List<ModuleListener>                                             _moduleListeners      = new ArrayList<>();
-	private final          List<Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest>> outFileAssertions     = new ArrayList<>();
-	private final @NonNull OFA                                                              ofa                   = new OFA(/* outFileAssertions */);
-	private                EDL_AccessBus                                                    ab;
-	private                ICompilationAccess                                               ca;
-	private                ICompilationBus                                                  compilationBus;
-	private                EDL_CompilationRunner                                            compilationRunner;
-	private                CompilerDriver compilerDriver;
-	private List<CompilerInput>           compilerInput;
-	private EDL_IPipelineAccess           pipelineAccess;
-	private EDL_PipelineLogic   pipelineLogic;
+	public final           Eventual<IPipelineAccess>       pipelineAccessPromise = new Eventual<>();
+	private final          Eventual<EDL_CompilationRunner> ecr                   = new Eventual<>();
+	private final          Eventual<AccessBus>             accessBusPromise      = new Eventual<>();
+	private final          EDL_ICompilation                compilation;
+	private final          CB_Output                       _cbOutput             = new CB_ListBackedOutput();
+	private final          Map<String, PipelinePlugin>     pipelinePlugins       = new HashMap<>();
+	private final          Map<OS_Module, ModuleThing>     moduleThings          = new HashMap<>();
+	private final          Subject<ReactiveDimension>      dimensionSubject      = ReplaySubject.create();
+	private final          Subject<Reactivable>            reactivableSubject    = ReplaySubject.create();
+	private final          Observer<ReactiveDimension>     dimensionObserver     = new __ReactiveDimensionObserver();
+	private final          Observer<Reactivable>           reactivableObserver   = new __ReactivableObserver();
+	private final @NonNull List<ElLog>                     elLogs                = new LinkedList<>();
+	private final          List<ModuleListener>            _moduleListeners      = new ArrayList<>();
+	private final @NonNull OFA                             ofa                   = new OFA(/* outFileAssertions */);
+	private                EDL_AccessBus                   ab;
+	private                ICompilationAccess              ca;
+	private                ICompilationBus                 compilationBus;
+	private                EDL_CompilationRunner           compilationRunner;
+	private                CompilerDriver                  compilerDriver;
+	private                List<CompilerInput>             compilerInput;
+	private                EDL_IPipelineAccess             pipelineAccess;
+	private                EDL_PipelineLogic               pipelineLogic;
 
 	public EDL_CompilationEnclosure(final EDL_ICompilation aCompilation) {
 		compilation = aCompilation;
