@@ -54,7 +54,6 @@ public class EDL_CompilationBus implements ICompilationBus {
 	@SuppressWarnings("SuspiciousGetterSetter")
 	@Override
 	public CompilerDriver getCompilerDriver() {
-		// 24/01/04 back and forth
 		return this._compilerDriver;
 	}
 

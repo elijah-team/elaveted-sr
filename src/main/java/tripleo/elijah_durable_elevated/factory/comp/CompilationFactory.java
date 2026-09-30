@@ -14,7 +14,7 @@ import java.util.List;
 public enum CompilationFactory {
 	;
 
-	@Contract("_, _ -> new")
+	@Contract(" -> new")
 	public static @NotNull EDL_Compilation mkCompilation0() {
 		return mkCompilation(new StdErrSink(), new EDL_IO());
 	}

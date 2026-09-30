@@ -10,7 +10,7 @@ package tripleo.elijah.nextgen.query;
 
 import org.jdeferred2.*;
 import org.jetbrains.annotations.*;
-import tripleo.elijah.lang.*;
+// import tripleo.elijah.lang.*;
 //import tripleo.elijah.stages.deduce.fluffy.i.*;
 //import tripleo.elijah.world.i.*;
 import tripleo.elijah.lang.i.*;

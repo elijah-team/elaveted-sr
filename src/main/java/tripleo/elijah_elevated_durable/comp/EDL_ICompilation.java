@@ -121,15 +121,19 @@ public interface EDL_ICompilation extends Compilation {
 
 	LangModel langModel();
 
-	default void feedInputsCon2(List<String> aStringList) {
-		var x= feedInputsCon(aStringList);
-		NotImplementedException.raise_stop();
-	}
-
-	CompilerController feedInputsCon(List<String> aStringList);
+	// default void feedInputsCon2(List<String> aStringList) {
+	// 	var x= feedInputsCon(aStringList);
+	// 	NotImplementedException.raise_stop();
+	// }
+	//
+	// CompilerController feedInputsCon(List<String> aStringList);
 
 	void onConfig(DoneCallback<IPersistentMap>
 				  cb);
 
 	void _doOnCompilation(EDL_Compilation aEdlCompilation);
+
+	/*<F, P>*/ Eventual<CompilerController> _ccP();
+
+	ICompilationAccess3 getCompilationAccess3();
 }

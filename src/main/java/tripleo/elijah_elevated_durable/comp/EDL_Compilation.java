@@ -12,7 +12,6 @@ import tripleo.elijah.comp.IO;
 import clojure.lang.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
-import io.reactivex.rxjava3.core.*;
 import io.reactivex.rxjava3.core.Observer;
 import org.apache.commons.lang3.tuple.*;
 import org.jdeferred2.*;
@@ -46,7 +45,6 @@ import tripleo.elijah_durable_elevated.stages.deduce.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.i.*;
 import tripleo.elijah_durable_elevated.stages.deduce.fluffy.impl.*;
 import tripleo.elijah_durable_elevated.stages.logging.*;
-import tripleo.elijah_durable_elevated.world.i.*;
 import tripleo.elijah_durable_elevated.world.i.LivingRepo;
 import tripleo.elijah_elevated_durable.backbone.*;
 import tripleo.elijah_elevated_durable.comp.input.*;
@@ -136,6 +134,13 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 			public void onDone(final EDL_Compilation result) {
 				qd = new QueryDatabaseImpl() {
 				};
+				_cis().advise(qd);
+			}
+		});
+		postEv.then(new DoneCallback<EDL_Compilation>() {
+			@Override
+			public void onDone(final EDL_Compilation result) {
+				_cis().advise(getCompilationEnclosure());
 			}
 		});
 	}
@@ -263,6 +268,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		return this.revised2;
 	}
 
+	@Override
 	public ICompilationAccess3 getCompilationAccess3() {
 		var _c = this;
 		if (compilationAccess3 == null) {
@@ -648,35 +654,6 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		return objectTree;
 	}
 
-	/**
-	 * Convenience function
-	 */
-	@Override
-	public CompilerController feedInputsCon(final List<String> aStringList) {
-		// contrast with defaultCompilerController
-		final NonOpinionatedBuilder nob                 = new NonOpinionatedBuilder();
-		final ICompilationAccess3   iCompilationAccess3 = getCompilationAccess3();
-		final CompilerController    controller          = nob.createCompilerController(iCompilationAccess3);
-		ccP.resolve(controller);
-		final CompilationInterfaceRevised revised = revised();
-		assert revised != null;
-		final int state = revised.getState();
-		assert state == 0;
-
-		final EDL_Compilation _c = this;
-		revised.advise(new RevisedAdvisable() {
-			@Override
-			public void reverse(final CompilationInterfaceRevised aCompilationInterfaceRevised, final Compilation c) {
-				assert _c == c;
-				_c.feedInputs(nob.inputs(aStringList), controller);
-			}
-		});
-		final int state2 = revised.getState();
-		//noinspection ExcessiveRangeCheck,ConditionCoveredByFurtherCondition
-		assert state2 == 1 || state2 != 0;
-		return controller;
-	}
-
 	@Override
 	public void use(@NotNull final CompilerInstructions compilerInstructions, final USE_Reasoning aReasoning) {
 		if (aReasoning.ty() == USE_Reasoning.Type.USE_Reasoning__findStdLib) {
@@ -897,11 +874,6 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		return this._revised;
 	}
 
-	//@Override
-	//public PW_CompilerController get_pw() {
-	//	return (PW_CompilerController) this.pw_controller;
-	//}
-
 
 	@Override
 	public @NotNull EOT_OutputTree getOutputTree() {
@@ -1024,6 +996,11 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 	@Override
 	public void _doOnCompilation(final EDL_Compilation aEdlCompilation) {
 		postEv.resolve(aEdlCompilation);
+	}
+
+	@Override
+	public Eventual<CompilerController> _ccP() {
+		return this.ccP;
 	}
 
 	@Override

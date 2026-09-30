@@ -19,7 +19,7 @@ public class EDL_CompilerDriver implements CompilerDriver {
 	public EDL_CompilerDriver(final ICompilationBus aCompilationBus) {
 		cb = aCompilationBus;
 
-		if (!initialized) {
+		if (!initialized) { // there are no maven plugins in this line...
 			defaults.put(CompilationAlways.Tokens.COMPILATION_RUNNER_START, new EDL_CD_CompilationRunnerStart());
 			defaults.put(CompilationAlways.Tokens.COMPILATION_RUNNER_FIND_STDLIB2, new EDL_CD_FindStdLib());
 			initialized = true;

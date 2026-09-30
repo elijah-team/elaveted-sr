@@ -92,7 +92,8 @@ public interface CompilationEnclosure extends Asseverable, GCompilationEnclosure
 
 	void noteAccept(@NotNull WorldModule aWorldModule);
 
-	@NonNull EDL_CompilationEnclosure.OFA OutputFileAsserts();
+	@NonNull
+	EDL_CompilationEnclosure.OFA OutputFileAsserts();
 
 	void reactiveJoin(Reactive aReactive);
 

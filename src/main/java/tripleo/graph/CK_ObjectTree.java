@@ -13,5 +13,6 @@ public interface CK_ObjectTree {
 
 	EIT_ModuleList getModuleList();
 
+	/// fixme I am guessing that this needs attention
 	void addSystemNode(String aPath, Object aObject);
 }
