@@ -34,7 +34,7 @@ public class Main {
 		}
 
 		public CompilerController getCompilerController() {
-			assert triggerOk();
+			if (!triggerOk()) throw new AssertionError();
 			return this.ca[0];
 		}
 
@@ -60,7 +60,7 @@ public class Main {
 			if (this.ca == null) return false;
 			if (this.stringArray == null) return false;
 
-			assert this.stringList != null;
+			if (this.stringList == null) throw new AssertionError();
 
 			ElijahCon.compileA(this.stringList, Helpers.List_of(ca), new DoneCallback<CompilerController>() {
 				@Override
@@ -114,7 +114,7 @@ public class Main {
 		final List<String> args2 = new ArrayList<>();
 		elaveted.feedCljList(pargs, args2);
 		final boolean b = elaveted.triggerCallback(config);
-		assert b;
+		if (!b) throw new AssertionError();
 		return elaveted.getCompilerController();
 	}
 
