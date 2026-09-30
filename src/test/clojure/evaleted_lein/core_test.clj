@@ -27,6 +27,7 @@
                "CompilerController"       (fn [x]
                                             (swap! cca 'x))}
           ctl (Main/main3 (list f) cfg)]
+      (is (not (= nil ctl)))
       (is (= (.errorCount ctl) 1)))))
 
 (defn hello []
