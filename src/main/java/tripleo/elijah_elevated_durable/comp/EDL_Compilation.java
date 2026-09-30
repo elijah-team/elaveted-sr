@@ -134,7 +134,7 @@ public class EDL_Compilation implements EDL_ICompilation, EventualRegister {
 		postEv.then(new DoneCallback<EDL_Compilation>() {
 			@Override
 			public void onDone(final EDL_Compilation result) {
-				qd = new QueryDatabase() {
+				qd = new QueryDatabaseImpl() {
 				};
 			}
 		});
