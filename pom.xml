@@ -8,7 +8,7 @@
   <name>elaveted-lein</name>
   <description/>
   <scm>
-    <tag>33de3e170a08562c2334eedbf5c561fc53fe8c76</tag>
+    <tag>436a5e479eabf29562aa36bf6f5b758ea662b0d7</tag>
   </scm>
   <build>
     <sourceDirectory>src/main/clojure</sourceDirectory>
@@ -143,6 +143,11 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-nop</artifactId>
       <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
     </dependency>
   </dependencies>
   <properties>
