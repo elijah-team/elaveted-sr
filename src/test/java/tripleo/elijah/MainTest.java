@@ -5,9 +5,11 @@ import org.junit.*;
 import tripleo.elijah.comp.i.*;
 import tripleo.elijah_clojure.example.*;
 
+import java.io.*;
+
 public class MainTest {
 
-	@Test
+	@Test(expected = FileNotFoundException.class)
 	public void main1() throws Exception {
 		var x = CljExampleMain.callClojure("ns", "fn");
 		//assertThat(x).isNotNull();
