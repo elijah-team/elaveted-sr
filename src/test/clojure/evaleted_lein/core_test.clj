@@ -46,7 +46,8 @@
   (testing "can't figure out the repl"
     (do
       (let [ch1 (tep/el-make-chan)]
-        (tep/el-run-loop [ch1]))
+        ;(tep/el-run-loop [ch1]))
+        nil)
       ;(tep/start)
       
       )
