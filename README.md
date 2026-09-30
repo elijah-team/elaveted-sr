@@ -15,15 +15,11 @@ Guessing that the intent was to use `lein test` (and *maybe* `lein pom`)
 
 ### Notes
 
-- [ ] something about maven plugins
-- [ ] something about felix/karaf//hdfs
+- [ ] something about maven plugins (re deprecating ./mvnw)
 - [ ] something about instrumental and jimfs (there is another one as well)
 - [ ] part of the entire point of clojure was to get parallel/concurrency
 - [ ] part of the original motivation of clojure was to get more concision
-- [ ] we need a static server
-- [ ] we need a dynamic server
-- [ ] Uni stuff might be a good fit here
-- [ ] Figure out instrumental
+- [ ] Uni stuff prob not a good fit here
 - [ ] something about sdlc/c../sda whatever 
 - [ ] ...
 
@@ -32,6 +28,6 @@ Guessing that the intent was to use `lein test` (and *maybe* `lein pom`)
 
 - [ ] Use `duct` (aka def start with clojure.cli and not junit: was working on this elsewhere)
 - [ ] Missionary/aleph
-- [ ] Define the scope of these products
+- [ ] Define the scope of these products (felix and karaf, and poss. instrumental)
 - [ ] A static server will show blather and ADRs
 - [ ] A dynamic server could do share-alike documentation/demos
