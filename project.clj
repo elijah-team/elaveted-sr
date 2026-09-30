@@ -87,10 +87,10 @@
                              ]}}
 
   :plugins
-  [;[dev.weavejester/lein-cljfmt "0.12.0"]
-  ;[lein-marginalia "0.9.2"]
-  [lein-javac "1.2.1-SNAPSHOT"]
-    ]
+  [[lein-localrepo "0.5.4"]
+   ;[dev.weavejester/lein-cljfmt "0.12.0"]
+   ;[lein-marginalia "0.9.2"]
+   [lein-javac "1.2.1-SNAPSHOT"]]
 
   :pom-addition
   [:properties
