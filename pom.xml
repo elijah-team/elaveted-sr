@@ -8,10 +8,7 @@
   <name>elaveted-lein</name>
   <description/>
   <scm>
-    <url>https://github.com/elijah-tng/elevated-potential</url>
-    <connection>scm:git:git://github.com/elijah-tng/elevated-potential.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/elijah-tng/elevated-potential.git</developerConnection>
-    <tag>d039ea9be74ba6af0956262e5c9b7d24d5224838</tag>
+    <tag>33de3e170a08562c2334eedbf5c561fc53fe8c76</tag>
   </scm>
   <build>
     <sourceDirectory>src/main/clojure</sourceDirectory>
@@ -147,12 +144,6 @@
       <artifactId>slf4j-nop</artifactId>
       <version>1.7.25</version>
     </dependency>
-	  <dependency>
-		  <groupId>junit</groupId>
-		  <artifactId>junit</artifactId>
-		  <version>4.13.1</version>
-		  <scope>test</scope>
-	  </dependency>
   </dependencies>
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
