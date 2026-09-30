@@ -529,7 +529,7 @@ public class EDL_CompilationEnclosure
 
 		@Override
 		public void add(final WorldModule item) {
-//			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] add " + item.module().getFileName());
+			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] add " + item.module().getFileName());
 
 			// TODO Reactive pattern (aka something ala ReplaySubject)
 			for (final ModuleListener moduleListener : _moduleListeners) {
@@ -539,7 +539,7 @@ public class EDL_CompilationEnclosure
 
 		@Override
 		public void complete() {
-			//assert !_moduleListeners.isEmpty();
+			if (_moduleListeners.isEmpty()) throw new AssertionError();
 
 			// 09/26 tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] complete");
 
