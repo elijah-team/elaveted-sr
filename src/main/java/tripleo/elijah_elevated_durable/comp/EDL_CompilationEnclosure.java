@@ -540,7 +540,8 @@ public class EDL_CompilationEnclosure
 		public void complete() {
 			if (_moduleListeners.isEmpty()) throw new AssertionError();
 
-			// 09/26 tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] complete");
+			// 09/26
+			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] complete");
 
 			// TODO Reactive pattern (aka something ala ReplaySubject)
 			for (final ModuleListener moduleListener : _moduleListeners) {
