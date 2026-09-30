@@ -1,6 +1,6 @@
 package tripleo.elijah.nextgen.query;
 
-import tripleo.elijah.world.i.*;
+import tripleo.elijah_durable_elevated.world.i.*;
 import tripleo.elijah_fluffy.diagnostic.*;
 import tripleo.elijah_fluffy.util.*;
 
