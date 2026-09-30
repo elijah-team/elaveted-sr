@@ -1,7 +1,5 @@
 /.idea/workspace.xml
-/.idea/gitlab-quickmr.xml
-/.idea/uiDesigner.xml
-#######/.idea/**
+/.idea/
 /bin/
 /out/
 /output/
@@ -23,11 +21,9 @@
 /.lein-failures
 /.clj-kondo/.cache/v1/
 /.clj-kondo/imports/
-/target-/
 /.lsp/.cache/db.transit.json
 /.lein-repl-history
 /.nrepl-port
 /.calva/repl.calva-repl
 elaveted-lein.iml
 .idea/modules.xml
-elaveted-lein.iml
