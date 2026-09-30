@@ -563,6 +563,44 @@ public class EDL_CompilationEnclosure
 			tripleo.elijah_fluffy.util.SimplePrintLoggerToRemoveSoon.println_err_4("[ModuleListener_ModuleCompletableProcess] start");
 		}
 	}
+
+	public class OFA implements Iterable<Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest>> {
+		private final List<Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest>> outFileAssertions = new ArrayList<>();
+
+		// public OFA(final List<Triple<AssOutFile, EOT_OutputFile.FileNameProvider,
+		// NG_OutputRequest>> aOutFileAssertions) {
+		// _l = aOutFileAssertions;
+		// }
+
+		public boolean contains(String aFileName) {
+			for (Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest> outFileAssertion : outFileAssertions) {
+				final String containedFilename = outFileAssertion.getMiddle().getFilename();
+
+				if (containedFilename.equals(aFileName)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public Iterator<Triple<AssOutFile, EOT_FileNameProvider, NG_OutputRequest>> iterator() {
+			return outFileAssertions.stream().iterator();
+		}
+
+		public void AssertOutFile_Class(final AssOutFile aAssOutFile, final OutputStrategyC.OSC_NFC aNfc, final NG_OutputRequest aOutputRequest) {
+			outFileAssertions.add(Triple.of(aAssOutFile, aNfc, aOutputRequest));
+		}
+
+		public void AssertOutFile_Function(final AssOutFile aAssOutFile, final OutputStrategyC.OSC_NFF aNff, final NG_OutputRequest aOutputRequest) {
+			outFileAssertions.add(Triple.of(aAssOutFile, aNff, aOutputRequest));
+		}
+
+		public void AssertOutFile_Namespace(final AssOutFile aAssOutFile, final OutputStrategyC.OSC_NFN aNfn, final NG_OutputRequest aOutputRequest) {
+			outFileAssertions.add(Triple.of(aAssOutFile, aNfn, aOutputRequest));
+		}
+	}
 }
 
 //
