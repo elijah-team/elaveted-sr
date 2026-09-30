@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extensions>
+	<extension>
+		<groupId>eu.maveniverse.maven.nisse</groupId>
+		<artifactId>extension</artifactId>
+		<version>${version.nisse}</version>
+	</extension>
+	<extension>
+		<!-- could be better/customized (TODO specify) -->
+		<groupId>eu.maveniverse.maven.heimdall</groupId>
+		<artifactId>extension3</artifactId>
+		<version>${heimdallVersion}</version>
+	</extension>
+
+	<!--
+	<extension>
+		<groupId>com.marvinformatics.jacoco</groupId>
+		<artifactId>easy-jacoco-maven-plugin</artifactId>
+		<version>0.1.4</version>
+	</extension>
+	-->
+
+	<extension>
+		<!--there are a couple of versions available, we have settled/specialized on 1.1.0, at least here-->
+		<groupId>org.apache.maven.extensions</groupId>
+		<artifactId>maven-build-cache-extension</artifactId>
+		<!--		<version>1.2.1</version>-->
+		<version>1.1.0</version>
+	</extension>
+</extensions>

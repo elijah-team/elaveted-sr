@@ -1,0 +1,6 @@
+!tripleo
+!io.github.openfeign
+com.github.elijah-team
+com.github.elijah-tng
+io.github.elijah-team
+io.github.elijah-tng

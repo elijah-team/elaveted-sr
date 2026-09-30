@@ -1,0 +1,14 @@
+!tripleo
+org
+com
+javax
+commons-codec
+commons-logging
+commons-lang
+commons-io
+net
+io
+aopalliance
+junit
+eu.maveniverse
+it.unimi.dsi
