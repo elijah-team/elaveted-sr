@@ -9,7 +9,7 @@ public class MainTest {
 
 	@Test
 	public void main1() throws Exception {
-		var x= CljExampleMain.callClojure("ns", "fn");
+		var x = CljExampleMain.callClojure("ns", "fn");
 		//assertThat(x).isNotNull();
 		Assert.assertNotNull(x);
 	}
