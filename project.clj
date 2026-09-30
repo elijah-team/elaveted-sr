@@ -1,4 +1,5 @@
-(defproject elaveted-lein "2025.99.100-SNAPSHOT"
+(defproject tripleo.elijah/elaveted-lein "2026.0930.002"
+  ;; ^^still not sure
   :javac-options ["-target"
                   "17"
                   "-source"
