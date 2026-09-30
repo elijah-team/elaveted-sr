@@ -374,17 +374,17 @@ public class EDL_CompilationEnclosure
 
 	@Override
 	public void AssertOutFile_Class(OutputStrategyC.OSC_NFC aNfc, NG_OutputRequest aOutputRequest) {
-		outFileAssertions.add(Triple.of(AssOutFile.CLASS, aNfc, aOutputRequest));
+		ofa.AssertOutFile_Class(AssOutFile.CLASS, aNfc, aOutputRequest);
 	}
 
 	@Override
 	public void AssertOutFile_Function(OutputStrategyC.OSC_NFF aNff, NG_OutputRequest aOutputRequest) {
-		outFileAssertions.add(Triple.of(AssOutFile.FUNCTION, aNff, aOutputRequest));
+		ofa.AssertOutFile_Function(AssOutFile.FUNCTION, aNff, aOutputRequest);
 	}
 
 	@Override
 	public void AssertOutFile_Namespace(OutputStrategyC.OSC_NFN aNfn, NG_OutputRequest aOutputRequest) {
-		outFileAssertions.add(Triple.of(AssOutFile.NAMESPACE, aNfn, aOutputRequest));
+		ofa.AssertOutFile_Namespace(AssOutFile.NAMESPACE, aNfn, aOutputRequest);
 	}
 
 	@Override
