@@ -1,7 +1,8 @@
 [tools]
-#java = "17"
-graalvm = "25"
+java = "17"
+#graalvm = "25"
 leiningen = "latest"
+#clojure = "latest" # TODO mise does not like 1.12.4
 
 [tasks.default]
 run = "lein --with-profile +dev repl"

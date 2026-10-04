@@ -9,7 +9,7 @@
 ;[com.example.my-project.system :as system]
 [tripleo.el-entry-point :as tep]))
 
-(def system nil)
+(def system nil) ; TODO alter-var-root vs swap! atom
 
 
 ;(defn init
@@ -17,7 +17,7 @@
 ;  []
 ;  (alter-var-root #'system
 ;                  (constantly (system/system))))
-;
+
 (defn start
   "Starts the current development system."
   []

@@ -7,6 +7,9 @@ tldr:
 - build with leiningen and/or tools.deps   
 - this is a soft reset line
 
+
+def of `elaveted`: function over form 
+
 ---
 
 Guessing that the intent was to use `lein test` (and *maybe* `lein pom`)
@@ -19,8 +22,8 @@ Guessing that the intent was to use `lein test` (and *maybe* `lein pom`)
 - [ ] something about instrumental and jimfs (there is another one as well)
 - [ ] part of the entire point of clojure was to get parallel/concurrency
 - [ ] part of the original motivation of clojure was to get more concision
-- [ ] Uni stuff prob not a good fit here
-- [ ] something about sdlc/c../sda whatever 
+- [ ] Poss. decomplicate by excluding Uni stuff in this line
+- [ ] something about sdlc/.. whatever 
 - [ ] ...
 
 
