@@ -1,4 +1,4 @@
-(defproject tripleo.elijah/elaveted-lein "2026.0930.002"
+(defproject tripleo.elijah/elaveted-lein "2026.0930.003"
   ;; ^^still not sure
   :javac-options ["-target"
                   "17"
